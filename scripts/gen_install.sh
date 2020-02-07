@@ -5,7 +5,7 @@
 # create install file
 echo '#!/bin/sh
 ' > install.sh
-grep -E "(^HTTP_)|(^PKG_PATH)" .config >> install.sh
+cat .config >> install.sh
 echo '
 
 # Generate conf file
