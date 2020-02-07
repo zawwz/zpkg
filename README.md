@@ -1,6 +1,6 @@
 # zpkg
 
-Simple and basic packaging system
+Basic and simple packaging system
 
 Designed to be used by anyone and deployed anywhere,
 it is a very basic packaging system without much functionnality but very portable
