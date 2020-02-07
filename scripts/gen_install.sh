@@ -9,12 +9,16 @@ cat .config >> install.sh
 echo '
 
 # Generate conf file
-mkdir -p /etc/zpkg || exit $?
 {
   echo "SSH_ADDRESS=$SSH_USER@$SSH_ADDR"
   echo "HTTP_ADDRESS=$HTTP_ADDR/$HTTP_PATH"
   echo "PKG_PATH=pkg"
-} > /etc/zpkg/zpkg.conf
+} > zpkg.conf
+if [ ! -f "/etc/zpkg/zpkg.conf ]
+then
+  mkdir -p /etc/zpkg || exit $?
+  mv zpkg.conf /etc/zpkg || exit $?
+fi
 
 # download zpkg
 mkdir -p tmp || exit $?
