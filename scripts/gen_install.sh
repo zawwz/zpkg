@@ -14,7 +14,7 @@ echo '
   echo "HTTP_ADDRESS=$HTTP_ADDR/$HTTP_PATH"
   echo "PKG_PATH=pkg"
 } > zpkg.conf
-if [ ! -f "/etc/zpkg/zpkg.conf ]
+if [ ! -f "/etc/zpkg/zpkg.conf" ]
 then
   mkdir -p /etc/zpkg || exit $?
   mv zpkg.conf /etc/zpkg || exit $?
