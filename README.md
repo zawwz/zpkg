@@ -53,7 +53,7 @@ You need to be able to SSH to the zpkg user. SSH keys are recommended
 
 ### Deploying packages
 
-`zpkg deploy <pkg...>`
+`zpkg deploy <pkg...>`  
 Targets are architectured as the linux filesystem
 
 ## Functionality
