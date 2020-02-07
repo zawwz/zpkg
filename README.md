@@ -7,7 +7,7 @@ it is a very basic packaging system without much functionnality but very portabl
 
 Official repo: `http://zawz.net/zpkg`
 
-## Use as user
+## As user
 
 ### Installing
 
@@ -40,3 +40,19 @@ You need to be able to SSH to the zpkg user. SSH keys are recommended
 2. Run `server_deploy.sh`
 
 3. Make available the package directory to the HTTP server
+
+## Functionality
+
+- Install packages
+- Remove packages
+- Update packages
+- Config redirection
+
+### Non-present functionality
+
+- Dependencies
+- Versions
+- Multi-repo
+
+These functionalities are not planned to be added,
+zpkg is designed to be a basic package manager
