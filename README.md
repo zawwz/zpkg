@@ -29,7 +29,7 @@ If you wish to use another repository, substitute `zawz.net/zpkg` for your desir
 
 ### Using
 
-See `zpkg help`
+See `zpkg -h`
 
 
 ## Deploy on a server
