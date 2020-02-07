@@ -17,10 +17,12 @@ mkdir -p "$DIR/$PKG$DEST" || exit $?
 mkdir -p "$DIR/$PKG$BASHDEST" || exit $?
 cp src/zpkg.bash "$ZPKG_PKG_PATH/$PKG$BASHDEST" || exit $?
 cp src/zpkg "$ZPKG_PKG_PATH/$PKG$DEST" || exit $?
-cd pkg/zpkg || exit $?
-tar -cvJf zpkg.tar.xz * || exit $?
-# send package
-scp zpkg.tar.xz "$ssh":~/"$PKG_PATH" || exit $?
+(
+  cd pkg/zpkg || exit $?
+  tar -cvJf zpkg.tar.xz * || exit $?
+  # send package
+  scp zpkg.tar.xz "$ssh":~/"$PKG_PATH" || exit $?
+)
 rm -rd "$DIR"
 # update database
 ssh "$ssh" sh database_update.sh || exit $?

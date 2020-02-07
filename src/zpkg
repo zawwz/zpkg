@@ -82,7 +82,7 @@ deploy_package ()
 
 fetch_package ()
 {
-  if ! wget "$HTTP_ADDRESS/zpkg/$1.tar.xz" -q --show-progress -O "$1.tar.xz" 2>&1
+  if ! wget "$HTTP_ADDRESS/$1.tar.xz" -q --show-progress -O "$1.tar.xz" 2>&1
   then
     echo "Package '$1' not found" > /dev/stderr
     return 1
@@ -105,7 +105,7 @@ fetch_pkglist ()
 {
   cd "$config_path"
   mv pkglist pkglist_bak 2>/dev/null
-  if ! wget "$HTTP_ADDRESS/zpkg/pkglist" -q --show-progress -O pkglist 2>&1
+  if ! wget "$HTTP_ADDRESS/pkglist" -q --show-progress -O pkglist 2>&1
   then
     echo "Couldn't fetch server data" > /dev/stderr
     mv pkglist_bak pkglist 2>/dev/null
@@ -216,9 +216,6 @@ fi
 
 . "$config_file"
 
-#ssh_address=$(grep "SSH_ADDRESS=" "$config_file" | cut -d '=' -f2-)
-#http_address=$(grep "HTTP_ADDRESS=" "$config_file" | cut -d '=' -f2-)
-#pkg_path=$(grep "PKG_PATH=" "$config_file" | cut -d '=' -f2-)
 if [ "$(echo $PKG_PATH | cut -c1)" != "/" ]
 then
   PKG_PATH="$config_path/$PKG_PATH"
