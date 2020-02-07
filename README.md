@@ -9,11 +9,20 @@ Official repo: `http://zawz.net/zpkg`
 
 ## As user
 
+Requirements:
+- curl
+- sudo
+- wget
+- tar
+
+Optional:
+- pv
+
 ### Installing
 
 ```shell
 curl -SO http://zawz.net/zpkg/install.sh
-sh install.sh
+sudo sh install.sh
 ```
 
 If you wish to use another repository, substitute `zawz.net/zpkg` for your desired target  
@@ -21,6 +30,7 @@ If you wish to use another repository, substitute `zawz.net/zpkg` for your desir
 ### Using
 
 See `zpkg help`
+
 
 ## Deploy on a server
 
@@ -40,6 +50,11 @@ You need to be able to SSH to the zpkg user. SSH keys are recommended
 2. Run `server_deploy.sh`
 
 3. Make available the package directory to the HTTP server
+
+### Deploying packages
+
+`zpkg deploy <pkg...>`
+Targets are architectured as the linux filesystem
 
 ## Functionality
 
