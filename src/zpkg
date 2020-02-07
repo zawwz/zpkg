@@ -21,7 +21,7 @@ usage ()
   echo "    list                  List currently installed packages"
   echo "    list-all              List all packages in repository"
   echo "    list-outdated         List outdated packages"
-  echo "    list-removed         List outdated packages"
+  echo "    list-removed          List outdated packages"
   echo "Admin operations:"
   echo "    deploy  <path>        Deploy target to package server"
   echo ""
