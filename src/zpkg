@@ -4,7 +4,7 @@ config_path=/etc/zpkg
 
 getname ()
 {
-  readlink -f "$1" | rev | cut -d'/' -f1 | rev
+  basename "$(readlink -f "$1")"
 }
 
 usage ()
