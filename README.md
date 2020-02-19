@@ -69,5 +69,3 @@ Targets are architectured as the linux filesystem
 - Versions
 - Multi-repo
 
-These functionalities are not planned to be added,
-zpkg is designed to be a basic package manager
