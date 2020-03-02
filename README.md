@@ -10,7 +10,6 @@ Official repo: [http://zawz.net/zpkg](http://zawz.net/zpkg)
 ## As user
 
 Requirements:
-- curl
 - sudo
 - wget
 - tar
@@ -21,11 +20,24 @@ Optional:
 ### Installing
 
 ```shell
-curl -SO http://zawz.net/zpkg/install.sh
-sudo sh install.sh
+wget http://zawz.net/zpkg/install.sh
+sh install.sh
 ```
+> By default the config is installed to /etc/zpkg
 
 If you wish to use another repository, substitute `zawz.net/zpkg` for your desired target  
+
+
+#### Installing to a custom location
+
+Add the -c option to the install script to specify a custom config path for the install
+
+### Uninstalling
+
+```shell
+zpkg remove $(zpkg list)
+rm -rd /etc/zpkg
+```
 
 ### Using
 
@@ -51,21 +63,35 @@ You need to be able to SSH to the zpkg user. SSH keys are recommended
 
 3. Make available the package directory to the HTTP server
 
+### Package architecture
+
+```
+.
++-- DEPS
++-- ROOT
+|    +-- /
++-- HOME
+     +-- ~
+```
+- The ROOT directory repsesents the root filesystem  
+- The HOME directory represents the home directory of the user  
+- The DEPS file contains dependency packages separated by spaces or newlines. Dependencies are package names from the repository
+
 ### Deploying packages
 
-`zpkg deploy <pkg...>`  
-Targets are architectured as the linux filesystem
+`zpkg deploy <dir...>`  
+> Target directories are structured as described above  
+> The package name is the name of the directory
 
 ## Functionality
 
-- Install packages
-- Remove packages
-- Update packages
+- Install/Remove/Update packages
+- Dependency resolution
 - Config redirection
+- User Home capability
 
 ### Non-present functionality
 
-- Dependencies
 - Versions
 - Multi-repo
 
