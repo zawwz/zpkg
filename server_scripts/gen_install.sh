@@ -11,6 +11,20 @@ cat .config >> install.sh
 # body
 echo '
 
+usage()
+{
+  echo "$(basename "$0")" [option...]
+  echo "
+Options:
+  -h         Show this help message
+  -c <path>  Use this path as config"
+}
+
+random_string()
+{
+  tr -cd '[:alnum:]' < /dev/urandom | head -c$1
+}
+
 config_path=/etc/zpkg
 
 while getopts ":hc:" opt;
@@ -51,22 +65,23 @@ sudo mkdir -p "$config_path" || exit $?
 sudo mv zpkg.conf "$config_path" || exit $?
 
 # download zpkg
-mkdir -p tmp || exit $?
+tmpdir=/tmp/zpkg$(random_string 5)
+mkdir -p "$tmpdir" || exit $?
 (
-  cd tmp || exit $?
+  cd "$tmpdir" || exit $?
   if ! wget "$HTTP_ADDR/$HTTP_PATH/zpkg.tar.xz" -q -O "zpkg.tar.xz"
   then
     echo "Cannot reach $HTTP_ADDR/$HTTP_PATH" > /dev/stderr
     exit 1
   fi
-  tar xf zpkg.tar.xz || exit $?
+  tar -xf zpkg.tar.xz || exit $?
 
 # install zpkg package
   ROOT/usr/local/bin/zpkg install zpkg || exit $?
 )
 
 # cleanup
-rm -rd tmp || exit $?
+rm -rd "$tmpdir" || exit $?
 zpkg update-database >/dev/null || exit $?
 
 ' >> install.sh

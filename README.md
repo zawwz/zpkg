@@ -23,14 +23,10 @@ Optional:
 wget http://zawz.net/zpkg/install.sh
 sh install.sh
 ```
-> By default the config is installed to /etc/zpkg
+> By default the config is installed to /etc/zpkg.
+> This can be changed with the -c option
 
 If you wish to use another repository, substitute `zawz.net/zpkg` for your desired target  
-
-
-#### Installing to a custom location
-
-Add the -c option to the install script to specify a custom config path for the install
 
 ### Uninstalling
 

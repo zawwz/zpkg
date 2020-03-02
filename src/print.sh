@@ -21,7 +21,7 @@ Admin operations:
 Options:
   -h          Display this help
   -c <path>   Custom config path
-  -f          Force run when root
+  -f          Force running even when root
 '
 }
 
