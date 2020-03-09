@@ -1,6 +1,9 @@
 #!/bin/sh
 
-[ -z "$opt_f" ] && root_check || exit 10
+if [ -z "$opt_f" ] ; then
+  root_check || exit 10
+fi
+
 
 if [ -n "$1" ]
 then
@@ -88,7 +91,6 @@ then
     then
       echo "No package specified" > /dev/stderr
     else
-      root_check
       shift 1
       for I in $*
       do

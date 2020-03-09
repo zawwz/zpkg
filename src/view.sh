@@ -12,7 +12,7 @@ resolve_packages()
   cd "$PKG_PATH"
   for I in $*
   do
-    if ! grep -wq "^$I" pkglist
+    if ! grep -wq "^$I" pkglist 2>/dev/null
     then
       [ "$LOG" = "true" ] && echo "Package '$I' not found" > /dev/stderr
       RET=1
@@ -38,7 +38,7 @@ resolve_deps()
 is_installed()
 {
   cd "$PKG_PATH"
-  grep -qw "^$1" installed
+  grep -qw "^$1" installed 2>/dev/null
   return $?
 }
 
