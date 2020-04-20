@@ -20,13 +20,13 @@ Optional:
 ### Installing
 
 ```shell
-wget http://zawz.net/zpkg/install.sh
+wget http://zpkg.zawz.net/install.sh
 sh install.sh
 ```
 > By default the config is installed to /etc/zpkg.
 > This can be changed with the -c option
 
-If you wish to use another repository, substitute `zawz.net/zpkg` for your desired target  
+If you wish to use another repository, substitute `zpkg.zawz.net` for your desired target
 
 ### Uninstalling
 
