@@ -5,7 +5,7 @@ Basic and simple packaging system
 Designed to be used by anyone and deployed anywhere,
 it is a very basic packaging system without much functionnality but very portable
 
-Official repo: [http://zawz.net/zpkg](http://zawz.net/zpkg)
+Official repo: [http://zpkg.zawz.net](http://zpkg.zawz.net)
 
 ## As user
 
