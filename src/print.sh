@@ -14,7 +14,7 @@ Operations:
     list                  List currently installed packages
     list-all              List all packages in repository
     list-outdated         List outdated packages
-    list-removed          List outdated packages
+    list-removed          List removed packages
 Admin operations:
     deploy  <path...>     Deploy target to package server
 
