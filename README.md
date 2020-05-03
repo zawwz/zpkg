@@ -32,7 +32,7 @@ If you wish to use another repository, substitute `zpkg.zawz.net` for your desir
 
 ```shell
 zpkg remove $(zpkg list)
-rm -rd /etc/zpkg
+sudo rm -rd /etc/zpkg
 ```
 
 ### Using
