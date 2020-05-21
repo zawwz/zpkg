@@ -6,28 +6,27 @@ package()
   src="$1"
   pkg="$2"
   echo "Packaging $(getname "$src"): $(du -sh "$src" | awk '{print $1}')iB"
+
+  tmpdir="/tmp/zpkg_$(random_string 5)"
+  mkdir -p "$tmpdir"
   if [ ! -d "$src/ROOT" ] && [ ! -d "$src/HOME" ] && [ ! -f "$src/DEPS" ]
   then
-    tmpdir="/tmp/zpkg$(random_string 5)"
-    mkdir -p "$tmpdir"
-    cp -r "$src" "$tmpdir/ROOT"
-    src="$tmpdir"
-    clean_needed=true
+    mkdir -p "$tmpdir/package"
+    cp -r "$src" "$tmpdir/package/ROOT"
+  else
+    cp -r "$src" "$tmpdir/package"
   fi
   (
-  cd "$src"
+  cd "$tmpdir/package"
   if which pv >/dev/null 2>&1
   then
-    tar -cf - --owner=0 --group=0 -P * | pv -s "$(du -sb . | awk '{print $1}')" | xz > "$pkg"
+    tar -cf - --owner=0 --group=0 -P * | pv -s "$(du -sb . | awk '{print $1}')" | xz > "../$pkg"
   else
-    tar -cvJf - --owner=0 --group=0 * > "$pkg"
+    tar -cvJf - --owner=0 --group=0 * > "../$pkg"
   fi
   )
-  mv "$src/$pkg" ./
-  if [ -n "$clean_needed" ]
-  then
-    rm -rd "$tmpdir"
-  fi
+  mv "$tmpdir/$pkg" ./
+  rm -rd "$tmpdir"
 }
 
 deploy_package()

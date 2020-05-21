@@ -1,9 +1,11 @@
 #!/bin/sh
 
+# $1 = package name , $2 = output
 fetch_package()
 {
-  wget "$HTTP_ADDRESS/$1.tar.xz" -q --show-progress -O "$1.tar.xz" 2>&1
-  return $?
+  out="$2"
+  [ -z "$out" ] && out="$1.tar.xz"
+  wget "$HTTP_ADDRESS/$1.tar.xz" -q --show-progress -O "$out" 2>&1
 }
 
 # $1 = prefix
@@ -13,7 +15,7 @@ fetch_pkglist()
   $1 mv pkglist pkglist_bak 2>/dev/null
   if ! $1 wget "$HTTP_ADDRESS/pkglist" -q --show-progress -O pkglist 2>&1
   then
-    echo "Couldn't fetch server data" > /dev/stderr
+    echo "Couldn't fetch server data" >&2
     $1 mv pkglist_bak pkglist 2>/dev/null
     return 1
   else

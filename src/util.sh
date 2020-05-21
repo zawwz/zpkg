@@ -28,7 +28,7 @@ root_check()
 {
   if [ "$(id | cut -d'=' -f2 | cut -d'(' -f1)" -eq 0 ]
   then
-    echo "Cannot run as root" > /dev/stderr
+    echo "Cannot run as root" >&2
     return 1
   fi
   return 0

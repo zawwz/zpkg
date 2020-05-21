@@ -39,20 +39,22 @@ move_files()
 
 install_package()
 {
-  tmpdir="/tmp/zpkg$(random_string 5)"
+  tmpdir="/tmp/zpkg_$(random_string 5)"
   mkdir -p "$tmpdir"
   (
     cd "$tmpdir"
     if ! fetch_package "$1"
     then
-      echo "Package '$1' not found" > /dev/stderr
+      echo "Package '$1' not found" >&2
       return 1
     fi
-    unpack "$1.tar.xz"
-    sudo mv "$1.tar.xz" "$PKG_PATH"
+    sudo cp "$1.tar.xz" "$PKG_PATH"
+    unpack "$1.tar.xz" || return $?
     move_files ROOT / sudo 2>/dev/null
     move_files HOME "$HOME" 2>/dev/null
     add_package_entry "$1"
-  ) || return $?
+  )
+  ret=$?
   rm -rd "$tmpdir" 2>/dev/null
+  return $ret
 }

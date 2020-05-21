@@ -21,7 +21,7 @@ then
 fi
 if [ ! -f "$config_file" ]
 then
-  echo "Error: no config file '$config_file'" > /dev/stderr
+  echo "Error: no config file '$config_file'" >&2
   exit 1
 fi
 

@@ -23,7 +23,7 @@ Optional:
 wget http://zpkg.zawz.net/install.sh
 sh install.sh
 ```
-> By default the config is installed to /etc/zpkg.
+> By default the config is installed to /etc/zpkg
 > This can be changed with the -c option
 
 If you wish to use another repository, substitute `zpkg.zawz.net` for your desired target
@@ -37,7 +37,7 @@ sudo rm -rd /etc/zpkg
 
 ### Using
 
-See `zpkg -h`
+See `zpkg -h` for details
 
 
 ## Deploy on a server
@@ -49,7 +49,7 @@ To deploy on a server you need:
 - HTTP server
 - dedicated zpkg user
 
-You need to be able to SSH to the zpkg user. SSH keys are recommended
+You need to be able to SSH to the zpkg user, SSH keys are recommended
 
 ### Process
 
@@ -64,20 +64,22 @@ You need to be able to SSH to the zpkg user. SSH keys are recommended
 ```
 .
 +-- DEPS
++-- DESC
 +-- ROOT
 |    +-- /
 +-- HOME
      +-- ~
 ```
-- The ROOT directory repsesents the root filesystem  
+- The ROOT directory represents the root filesystem  
 - The HOME directory represents the home directory of the user  
 - The DEPS file contains dependency packages separated by spaces or newlines. Dependencies are package names from the repository
+- The DESC file contains the description of the package
 
 ### Deploying packages
 
 `zpkg deploy <dir...>`  
 > Target directories are structured as described above  
-> The package name is the name of the directory
+> The name of the directory is the package name
 
 ## Functionality
 
@@ -90,4 +92,4 @@ You need to be able to SSH to the zpkg user. SSH keys are recommended
 
 - Versions
 - Multi-repo
-
+- Hooks

@@ -2,4 +2,4 @@ SSH_ADDR=example.com
 SSH_USER=zpkg
 HTTP_ADDR=example.com
 HTTP_PATH=zpkg
-PKG_PATH='$HOME/pkg'
+PKG_PATH=pkg

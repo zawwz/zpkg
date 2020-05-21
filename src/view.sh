@@ -3,7 +3,13 @@
 deps()
 {
   cd "$PKG_PATH"
-  grep -w "^$1" pkglist | cut -d' ' -f3-
+  l=$(grep -w "^$1" pkglist) || return $?
+  echo "$l" | cut -d' ' -f3-
+}
+
+# $1 = pkg file
+desc() {
+  tar -xOf "$1" DESC
 }
 
 resolve_packages()
@@ -14,7 +20,7 @@ resolve_packages()
   do
     if ! grep -wq "^$I" pkglist 2>/dev/null
     then
-      [ "$LOG" = "true" ] && echo "Package '$I' not found" > /dev/stderr
+      [ "$LOG" = "true" ] && echo "Package '$I' not found" >&2
       RET=1
     else
       echo "$I"
@@ -27,12 +33,14 @@ resolve_packages()
 resolve_deps()
 {
   ALLDEPS=""
+  RET=0
   for I in $*
   do
-    ALLDEPS="$ALLDEPS $(deps $I)"
+    ALLDEPS="$ALLDEPS $(deps $I)" || { echo "Package '$I' not found" >&2 ; RET=$((RET+1)) ; }
   done
   [ "$INCLUDE_PACKAGES" = "true" ] && ALLDEPS="$ALLDEPS $*"
   echo "$ALLDEPS" | tr -s ' \n' '\n' | sort | uniq | sed '/^$/d'
+  return $RET
 }
 
 is_installed()
@@ -42,10 +50,15 @@ is_installed()
   return $?
 }
 
-view_package()
-{
-  cd "$PKG_PATH"
-  tar -tf "$1.tar.xz" | sed "s|^ROOT/|/|g ; /\/$/d ; s|^HOME/|$HOME/|g ; /^DEPS/d"
+# $1 = file
+view_package_file() {
+  tree=$(tar -tJf "$1" 2>/dev/null) || exit $?
+  echo "$tree" | sed "s|^ROOT/|/|g ; /\/$/d ; s|^HOME/|$HOME/|g ; /^DEPS/d" 2>/dev/null
+}
+
+# $1 = package name
+view_package() {
+  cd "$PKG_PATH" && view_package_file "$1.tar.xz"
 }
 
 removed_packages()

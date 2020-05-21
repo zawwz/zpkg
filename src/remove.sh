@@ -19,7 +19,7 @@ remove_package()
   archive="$(pwd)/$1.tar.xz"
   if [ ! -f "$archive" ] || ! grep -q -w "^$1" installed
   then
-    echo "Package '$1' not installed" > /dev/stderr
+    echo "Package '$1' not installed" >&2
     return 1
   fi
   echo "Removing $1"

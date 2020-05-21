@@ -3,7 +3,7 @@
 # config
 # no spaces in srcdir or ordered files
 SRCDIR=src
-ordered='options.sh config.sh main.sh'
+ordered='env.sh options.sh config.sh main.sh'
 
 # process
 COMMENTSCRIPT="/^\s*#/d;s/\s*#[^\"']*$//"
