@@ -47,7 +47,7 @@ deps)
     resolve_deps $* || exit $?
   fi
   ;;
-show)
+info)
   if [ -z "$2" ]
   then
     echo "No package specified" >&2

@@ -10,8 +10,9 @@ Operations:
     install <pkg...>      Install packages
     remove  <pkg...>      Remove packages
     fetch   <pkg...>      Fetch packages into current directory
-    show    <pkg...>      Show package files
     deps    <pkg...>      Show dependencies of package
+    show    <pkg...>      Show package files
+    info    <pkg...>      Show info of package
     list                  List currently installed packages
     list-all              List all packages in repository
     list-outdated         List outdated packages
