@@ -53,7 +53,7 @@ is_installed()
 # $1 = file
 view_package_file() {
   tree=$(tar -tJf "$1" 2>/dev/null) || exit $?
-  echo "$tree" | sed "s|^ROOT/|/|g ; /\/$/d ; s|^HOME/|$HOME/|g ; /^DEPS/d ; /^DESC/d" 2>/dev/null
+  echo "$tree" | grep -E '^ROOT/|^HOME/' | sed "/\/$/d ; s|^ROOT/|/|g ; s|^HOME/|$HOME/|g" 2>/dev/null
 }
 
 # $1 = package name

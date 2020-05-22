@@ -6,7 +6,7 @@ delete_files()
 {
   while read -r in
   do
-    if [ -n "in" ]
+    if [ -n "$in" ]
     then
       $1 rm -d "$in" 2>/dev/null
     fi
@@ -33,6 +33,6 @@ remove_package()
     tar -tf "$archive" HOME 2>/dev/null | sed 's|^HOME/||g' | tac | delete_files
   )
 
-  rm "$archive" 2>/dev/null
+  sudo rm "$archive" 2>/dev/null
   sudo sed -i "/^$1 /d" installed
 }
