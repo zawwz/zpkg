@@ -2,8 +2,8 @@
 
 _zpkg_completion()
 {
-  _cw1="deploy update update-database install remove fetch show list list-all list-outdated list-removed"
-  _cw1_pkgw="install remove fetch show"
+  _cw1="deploy update update-database install remove fetch show deps info list list-all list-outdated list-removed"
+  _cw1_pkgw="install remove fetch show deps info"
   _cw1_file="deploy"
   if [ "$COMP_CWORD" = "1" ] ; then
     _compwords=$_cw1
