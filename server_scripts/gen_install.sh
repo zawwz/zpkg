@@ -50,7 +50,7 @@ shift $((OPTIND-1))
 if [ "$(id | cut -d"=" -f2 | cut -d"(" -f1)" -eq 0 ] && [ "$1" != "force" ]
 then
   echo "Cannot run as root" >&2
-  echo "Use '"'"'$(basename "$0")'"'"' force to force running as root"
+  echo "Use '"'"'$(basename "$0") force'"'"' to force running as root"
   exit 10
 else
   which sudo >/dev/null || { echo "sudo not installed" >&2 && exit 11; }
