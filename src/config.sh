@@ -12,25 +12,24 @@ virtual_config_path()
 
 # resolve relative config_path
 config_path="$(resolve_path "$config_path" "$(pwd)")"
-
 config_file="$config_path/zpkg.conf"
 
-if [ ! -d "$config_path" ]
-then
-  sudo mkdir -p "$config_path" 2>/dev/null
+# setup sudo prefix
+unset sudo
+if ! root_check ; then
+  which sudo >/dev/null || { echo "sudo not installed" && exit 11; }
+  sudo=sudo
 fi
-if [ ! -f "$config_file" ]
-then
-  echo "Error: no config file '$config_file'" >&2
-  exit 1
-fi
+
+[ ! -d "$config_path" ] && { $sudo mkdir -p "$config_path" 2>/dev/null || exit $?; }
+[ ! -f "$config_file" ] && echo "Error: no config file '$config_file'" >&2 && exit 1
 
 . "$config_file"
 
 # resolve relative pkg_path
 PKG_PATH="$(resolve_path "$PKG_PATH" "$config_path")"
 
-if [ ! -d "$PKG_PATH" ]
-then
-  sudo mkdir -p "$PKG_PATH" 2>/dev/null
-fi
+root_check && [ -z "$opt_f" ] && [ "$ALLOW_ROOT" != "true" ] && echo "Cannot run as root" >&2 && exit 10
+
+[ ! -d "$PKG_PATH" ] $sudo mkdir -p "$PKG_PATH" 2>/dev/null
+

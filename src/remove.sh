@@ -6,13 +6,11 @@ delete_files()
 {
   while read -r in
   do
-    if [ -n "$in" ]
-    then
-      $1 rm -d "$in" 2>/dev/null
-    fi
+    [ -n "$in" ] && $1 rm -d "$in" 2>/dev/null
   done
 }
 
+# $1 = package , $2 = prefix
 remove_package()
 {
   cd "$PKG_PATH"
@@ -26,13 +24,13 @@ remove_package()
 
   ( # delete root files
     cd /
-    tar -tf "$archive" ROOT 2>/dev/null | sed 's|^ROOT/||g' | tac | delete_files sudo
+    tar -tf "$archive" ROOT 2>/dev/null | sed 's|^ROOT/||g' | tac | delete_files $2
   )
   ( # delete home files
     cd "$HOME"
     tar -tf "$archive" HOME 2>/dev/null | sed 's|^HOME/||g' | tac | delete_files
   )
 
-  sudo rm "$archive" 2>/dev/null
-  sudo sed -i "/^$1 /d" installed
+  $2 rm "$archive" 2>/dev/null
+  $2 sed -i "/^$1 /d" installed
 }

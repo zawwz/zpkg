@@ -68,9 +68,7 @@ removed_packages()
   do
     name=$(echo "$in" | awk '{print $1}')
     rem=$(grep -w "^$name" pkglist | awk '{print $2}')
-    if [ -z "$rem" ] ; then
-      echo $name
-    fi
+    [ -z "$rem" ] && echo $name
   done
 }
 
@@ -82,9 +80,6 @@ outdated_packages()
     name=$(echo "$in" | awk '{print $1}')
     loc=$(echo "$in" | awk '{print $2}')
     rem=$(grep -w "^$name" pkglist | awk '{print $2}')
-    if [ -n "$rem" ] && [ "$loc" -lt "$rem" ]
-    then
-      echo $name
-    fi
+    [ -n "$rem" ] && [ "$loc" -lt "$rem" ] && echo $name
   done
 }

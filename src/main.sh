@@ -1,14 +1,9 @@
 #!/bin/sh
 
-if [ -z "$opt_f" ] ; then
-  root_check || exit 10
-fi
-
-
 case "$1" in
 list) awk '{print $1}' "$PKG_PATH/installed" 2>/dev/null | sort ;;
 list-all) awk '{print $1}' "$PKG_PATH/pkglist" 2>/dev/null | sort ;;
-update-database) fetch_pkglist sudo ;;
+update-database) fetch_pkglist $sudo ;;
 fetch)
   if [ -z "$2" ]
   then
@@ -60,7 +55,7 @@ info)
   fi
   ;;
 install)
-  fetch_pkglist sudo || exit $?
+  fetch_pkglist $sudo || exit $?
   if [ -z "$2" ]
   then
     echo "No package specified" >&2
@@ -71,11 +66,8 @@ install)
     echo "Installing packages: $pkglist"
     for I in $pkglist
     do
-      if is_installed "$I"
-      then
-        remove_package "$I"
-      fi
-      install_package "$I"
+      is_installed $I && remove_package $I $sudo
+      install_package $I $sudo
     done
   fi
   ;;
@@ -87,12 +79,12 @@ remove)
     shift 1
     for I in $*
     do
-      remove_package "$I"
+      remove_package "$I" $sudo
     done
   fi
   ;;
 update)
-  fetch_pkglist sudo || exit 1
+  fetch_pkglist $sudo || exit 1
   r_pkg=$(removed_packages)
   o_pkg=$(outdated_packages)
   if [ -n "$r_pkg" ]
@@ -100,7 +92,7 @@ update)
     echo "Removing packages: "$r_pkg
     for I in $r_pkg
     do
-      remove_package $I
+      remove_package $I $sudo
     done
   fi
   if [ -n "$o_pkg" ]
@@ -108,8 +100,8 @@ update)
     echo "Updating packages: "$o_pkg
     for I in $o_pkg
     do
-      remove_package $I
-      install_package $I
+      remove_package $I $sudo
+      install_package $I $sudo
     done
   fi
   ;;

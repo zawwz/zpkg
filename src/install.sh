@@ -6,15 +6,16 @@ unpack()
   tar -xf "$1"
 }
 
+# $1 = package , $2 = prefix
 add_package_entry()
 {
   (
     cd "$PKG_PATH"
     if grep -q -w "$1" installed 2>/dev/null
     then
-      sudo sed "s|$1 .*\$|$1 $(date +%s)|g" -i installed
+      $2 sed "s|$1 .*\$|$1 $(date +%s)|g" -i installed
     else
-      sudo sh -c "echo '$1 $(date +%s)' >> installed"
+      $2 sh -c "echo '$1 $(date +%s)' >> installed"
     fi
   )
 }
@@ -37,22 +38,19 @@ move_files()
   done
 }
 
+# $1 = package , $2 = prefix
 install_package()
 {
   tmpdir="/tmp/zpkg_$(random_string 5)"
   mkdir -p "$tmpdir"
   (
     cd "$tmpdir"
-    if ! fetch_package "$1"
-    then
-      echo "Package '$1' not found" >&2
-      return 1
-    fi
-    sudo cp "$1.tar.xz" "$PKG_PATH"
+    fetch_package "$1" || { echo "Package '$1' not found" >&2 && return 1; }
+    $2 cp "$1.tar.xz" "$PKG_PATH"
     unpack "$1.tar.xz" || return $?
-    move_files ROOT / sudo 2>/dev/null
+    move_files ROOT / $2 2>/dev/null
     move_files HOME "$HOME" 2>/dev/null
-    add_package_entry "$1"
+    add_package_entry "$1" $2
   )
   ret=$?
   rm -rd "$tmpdir" 2>/dev/null

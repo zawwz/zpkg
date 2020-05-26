@@ -22,9 +22,13 @@ Admin operations:
 
 Options:
   -h          Display this help
-  -c <path>   Custom config path
+  -c <path>   Custom config path. Default /etc/zpkg
   -f          Force running when root
-"
+
+Config (zpkg.conf):
+  SSH_ADDRESS         SSH access for deploy
+  HTTP_ADDRESS        HTTP address for downloading packages
+  ALLOW_ROOT          Set to true to allow running as root without -f. Default: false"
 }
 
 error() {
