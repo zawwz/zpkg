@@ -1,5 +1,18 @@
+# zpkg server config
+
+# address of the SSH server
 SSH_ADDR=example.com
+# user for the SSH server
 SSH_USER=zpkg
-HTTP_ADDR=example.com
-HTTP_PATH=zpkg
+# path to packages for the zpkg user
 PKG_PATH=pkg
+
+# public address of the HTTP server
+HTTP_ADDR=example.com
+# path on server
+HTTP_PATH=zpkg
+
+# Compression to use for packages
+# format:
+#   extension:binary:parallel_binary:arguments
+COMPRESSION=xz:xz:pxz:-1

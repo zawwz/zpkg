@@ -28,7 +28,7 @@ show)
       then
         view_package "$I"
       else
-        wget "$HTTP_ADDRESS/$1.tar.xz" -q -O - 2>/dev/null | view_package_file - || { echo "Could not fetch package '$I'" >&2 ; return 1 ; }
+        wget "$HTTP_ADDRESS/$1.tar.$extension" -q -O - 2>/dev/null | view_package_file - || { echo "Could not fetch package '$I'" >&2 ; return 1 ; }
       fi
     done
   fi

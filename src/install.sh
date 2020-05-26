@@ -3,7 +3,7 @@
 unpack()
 {
   echo "Unpacking $1"
-  tar -xf "$1"
+  $pcompress -dc "$1" | tar -xf -
 }
 
 # $1 = package , $2 = prefix
@@ -46,8 +46,8 @@ install_package()
   (
     cd "$tmpdir"
     fetch_package "$1" || { echo "Package '$1' not found" >&2 && return 1; }
-    $2 cp "$1.tar.xz" "$PKG_PATH"
-    unpack "$1.tar.xz" || return $?
+    $2 cp "$1.tar.$extension" "$PKG_PATH"
+    unpack "$1.tar.$extension" || return $?
     move_files ROOT / $2 2>/dev/null
     move_files HOME "$HOME" 2>/dev/null
     add_package_entry "$1" $2

@@ -14,7 +14,7 @@ delete_files()
 remove_package()
 {
   cd "$PKG_PATH"
-  archive="$(pwd)/$1.tar.xz"
+  archive="$(pwd)/$1.tar.$extension"
   if [ ! -f "$archive" ] || ! grep -q -w "^$1" installed
   then
     echo "Package '$1' not installed" >&2
@@ -24,11 +24,11 @@ remove_package()
 
   ( # delete root files
     cd /
-    tar -tf "$archive" ROOT 2>/dev/null | sed 's|^ROOT/||g' | tac | delete_files $2
+    $pcompress -dc "$archive" | tar -tf - ROOT 2>/dev/null | sed 's|^ROOT/||g' | tac | delete_files $2
   )
   ( # delete home files
     cd "$HOME"
-    tar -tf "$archive" HOME 2>/dev/null | sed 's|^HOME/||g' | tac | delete_files
+    $pcompress -dc "$archive" | tar -tf - HOME 2>/dev/null | sed 's|^HOME/||g' | tac | delete_files
   )
 
   $2 rm "$archive" 2>/dev/null

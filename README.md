@@ -13,9 +13,10 @@ Requirements:
 - sudo
 - wget
 - tar
+- xz/gz
 
 Optional:
-- pv
+- pxz/pigz (faster compression/decompression)
 
 ### Installing
 

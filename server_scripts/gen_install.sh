@@ -11,6 +11,15 @@ cat .config >> install.sh
 # body
 echo '
 
+# resolve compression
+[ -z "$COMPRESSION" ] && COMPRESSION="xz:xz:pxz"
+extension=$(echo "$COMPRESSION" | cut -d":" -f1)
+compress=$(echo "$COMPRESSION" | cut -d":" -f2)
+pcompress=$(echo "$COMPRESSION" | cut -d":" -f3)
+which $pcompress >/dev/null 2>&1 || pcompress=$compress
+[ -z "$pcompress" ] && pcompress=$compress
+which $compress >/dev/null 2>&1 || { echo "Compression $compress not installed" && exit 12; }
+
 usage()
 {
   echo "$(basename "$0")" [option...]
@@ -47,13 +56,16 @@ done
 
 shift $((OPTIND-1))
 
-if [ "$(id | cut -d"=" -f2 | cut -d"(" -f1)" -eq 0 ] && [ "$1" != "force" ]
+unset sudo
+if [ "$(id | cut -d"=" -f2 | cut -d"(" -f1)" -eq 0 ]
 then
-  echo "Cannot run as root" >&2
-  echo "Use '"'"'$(basename "$0") force'"'"' to force running as root"
-  exit 10
+  if [ "$1" != "force" ] ; then
+    echo "Cannot run as root" >&2
+    echo "Use '"'"'$(basename "$0") force'"'"' to force running as root"
+    exit 10
+  fi
 else
-  which sudo >/dev/null || { echo "sudo not installed" >&2 && exit 11; }
+  which sudo >/dev/null 2>&1 || { echo "sudo not installed" >&2 && exit 11; }
   sudo=sudo
 fi
 
@@ -61,6 +73,7 @@ fi
 $sudo sh -c "{
   echo SSH_ADDRESS=$SSH_USER@$SSH_ADDR
   echo HTTP_ADDRESS=$HTTP_ADDR/$HTTP_PATH
+  echo COMPRESSION=$COMPRESSION
   echo PKG_PATH=pkg
 } > zpkg.conf"
 
@@ -73,12 +86,12 @@ tmpdir=/tmp/zpkg$(random_string 5)
 mkdir -p "$tmpdir" || exit $?
 (
   cd "$tmpdir" || exit $?
-  if ! wget "$HTTP_ADDR/$HTTP_PATH/zpkg.tar.xz" -q -O "zpkg.tar.xz"
+  if ! wget "$HTTP_ADDR/$HTTP_PATH/zpkg.tar.$extension" -q -O "zpkg.tar.$extension"
   then
     echo "Cannot reach $HTTP_ADDR/$HTTP_PATH" > /dev/stderr
     exit 1
   fi
-  tar -xf zpkg.tar.xz || exit $?
+  $pcompress -dc "zpkg.tar.$extension" | tar -xf - || exit $?
 
 # install zpkg package
   ROOT/usr/local/bin/zpkg -f install zpkg || exit $?

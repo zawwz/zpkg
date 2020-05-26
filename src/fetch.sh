@@ -4,8 +4,8 @@
 fetch_package()
 {
   out="$2"
-  [ -z "$out" ] && out="$1.tar.xz"
-  wget "$HTTP_ADDRESS/$1.tar.xz" -q --show-progress -O "$out" 2>&1
+  [ -z "$out" ] && out="$1.tar.$extension"
+  wget "$HTTP_ADDRESS/$1.tar.$extension" -q --show-progress -O "$out" 2>&1
 }
 
 # $1 = prefix

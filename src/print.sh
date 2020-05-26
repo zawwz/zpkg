@@ -42,20 +42,20 @@ package_info() {
   status="not installed"
   grep -wq "^$1" "$PKG_PATH/pkglist" 2>/dev/null || { echo "Package '$I' not found" && return 1; }
   grep -wq "^$1" "$PKG_PATH/installed" 2>/dev/null && status=installed
-  if [ "$status" = "installed" ] && [ -f "$PKG_PATH/$1.tar.xz" ]
+  if [ "$status" = "installed" ] && [ -f "$PKG_PATH/$1.tar.$extension" ]
   then
-    pkg="$PKG_PATH/$1.tar.xz"
+    pkg="$PKG_PATH/$1.tar.$extension"
   else
     tmpdir="/tmp/zpkg_$(random_string 5)"
     pwd=$(pwd)
     mkdir "$tmpdir"
     fetch_package "$1" >/dev/null 2>&1 || { echo "Error fetching package" >&2 && ret=$?; }
-    pkg="$1.tar.xz"
+    pkg="$1.tar.$extension"
   fi
   deps=$(deps "$1")
   desc=$(desc "$pkg" 2>/dev/null)
   csize=$(stat -c '%s' "$pkg" | numfmt --to=iec-i --suffix=B --padding 6)
-  isize=$(xz -dc "$pkg" | wc -c | numfmt --to=iec-i --suffix=B --padding 6)
+  isize=$($pcompress -dc "$pkg" | wc -c | numfmt --to=iec-i --suffix=B --padding 6)
   [ -n "$cleanup" ] && { cd "$pwd"; rm -rd "$tmpdir"; }
 
   [ -n "$ret" ] && return $ret

@@ -17,7 +17,7 @@ config_file="$config_path/zpkg.conf"
 # setup sudo prefix
 unset sudo
 if ! root_check ; then
-  which sudo >/dev/null || { echo "sudo not installed" && exit 11; }
+  which sudo >/dev/null 2>&1 || { echo "sudo not installed" && exit 11; }
   sudo=sudo
 fi
 
@@ -31,5 +31,14 @@ PKG_PATH="$(resolve_path "$PKG_PATH" "$config_path")"
 
 root_check && [ -z "$opt_f" ] && [ "$ALLOW_ROOT" != "true" ] && echo "Cannot run as root" >&2 && exit 10
 
-[ ! -d "$PKG_PATH" ] $sudo mkdir -p "$PKG_PATH" 2>/dev/null
+[ ! -d "$PKG_PATH" ] && $sudo mkdir -p "$PKG_PATH"
 
+# resolve compression
+[ -z "$COMPRESSION" ] && COMPRESSION="xz:xz:pxz"
+extension=$(echo "$COMPRESSION" | cut -d':' -f1)
+compress=$(echo "$COMPRESSION" | cut -d':' -f2)
+pcompress=$(echo "$COMPRESSION" | cut -d':' -f3)
+comparg=$(echo "$COMPRESSION" | cut -d':' -f4-)
+which $pcompress >/dev/null 2>&1 || pcompress=$compress
+[ -z "$pcompress" ] && pcompress=$compress
+which $compress >/dev/null 2>&1 || { echo "Compression '$compress' not installed" && exit 12; }

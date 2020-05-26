@@ -4,6 +4,13 @@
 
 ssh="$SSH_USER@$SSH_ADDR"
 
+[ -z "$COMPRESSION" ] && COMPRESSION="xz:xz:pxz"
+extension=$(echo "$COMPRESSION" | cut -d':' -f1)
+compress=$(echo "$COMPRESSION" | cut -d':' -f2)
+pcompress=$(echo "$COMPRESSION" | cut -d':' -f3)
+which $pcompress >/dev/null 2>&1 || pcompress=$compress
+[ -z "$pcompress" ] && pcompress=$compress
+which $compress >/dev/null 2>&1 || { echo "Compression '$compress' not installed" && exit 12; }
 
 random_string()
 {
@@ -30,9 +37,9 @@ mv zpkg "$fullpath$DEST" || exit $?
 # create and send package
 (
   cd "$tmpdir/$PKG" || exit $?
-  tar -cvJf zpkg.tar.xz * || exit $?
+  tar -cf - * | $pcompress > zpkg.tar.$extension || exit $?
   # send package
-  scp zpkg.tar.xz "$ssh":~/"$PKG_PATH" || exit $?
+  scp zpkg.tar.$extension "$ssh":~/"$PKG_PATH" || exit $?
 )
 # cleanup
 rm -rd "$tmpdir"
