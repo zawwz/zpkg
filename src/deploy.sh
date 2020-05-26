@@ -18,11 +18,16 @@ package()
   fi
   (
   cd "$tmpdir/package"
+  unset list
+  [ -f DEPS ] && list=DEPS
+  [ -f DESC ] && list="$list DESC"
+  [ -d HOME ] && list="$list HOME"
+  [ -d ROOT ] && list="$list ROOT"
   if which pv >/dev/null 2>&1
   then
-    tar -cf - --owner=0 --group=0 -P * | pv -s "$(du -sb . | awk '{print $1}')" | xz > "../$pkg"
+    tar -cf - --owner=0 --group=0 -P $list | pv -s "$(du -sb . | awk '{print $1}')" | xz > "../$pkg"
   else
-    tar -cvJf - --owner=0 --group=0 * > "../$pkg"
+    tar -cvJf - --owner=0 --group=0 $list > "../$pkg"
   fi
   )
   mv "$tmpdir/$pkg" ./
