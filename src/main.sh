@@ -6,8 +6,8 @@ fi
 
 
 case "$1" in
-list) awk '{print $1}' "$PKG_PATH/installed" 2>/dev/null ;;
-list-all) awk '{print $1}' "$PKG_PATH/pkglist" 2>/dev/null ;;
+list) awk '{print $1}' "$PKG_PATH/installed" 2>/dev/null | sort ;;
+list-all) awk '{print $1}' "$PKG_PATH/pkglist" 2>/dev/null | sort ;;
 update-database) fetch_pkglist sudo ;;
 fetch)
   if [ -z "$2" ]
