@@ -45,12 +45,14 @@ deploy_folder()
   then
     $pcompress -dc >/dev/null 2>&1 | tar -tf - >/dev/null 2>&1|| { echo "File '$1' is not a valid archive" && return 1; }
     deploy_package "$1" "$1" || return $?
-  elif [ -d "$1" ]
+  elif [ -d "$1" ] # folder
   then
+    tmpdirar="/tmp/zpkg_$(random_string 5)"
+    mkdir -p "$tmpdirar"
     archive="$(getname "$1").tar.$extension"
-    package "$1" "/tmp/$archive" || return $?
-    deploy_package "/tmp/$archive" || return $?
-    rm "/tmp/$archive"
+    package "$1" "$tmpdirar/$archive" || return $?
+    deploy_package "$tmpdirar/$archive" || return $?
+    rm "$tmpdirar/$archive"
   else
     echo "Target '$1' doesn't exist"
   fi
@@ -58,5 +60,5 @@ deploy_folder()
 
 update_remote_database()
 {
-  ssh $SSH_ADDRESS "~/database_update.sh"
+  ssh $SSH_ADDRESS sh database_update.sh $*
 }

@@ -121,11 +121,14 @@ list-removed)
   ;;
 deploy)
   shift 1
-  for I in $*
+  unset pkglist
+  for I
   do
-    deploy_folder "$I" || exit 1
+    deploy_folder "$I"
+    pkglist="$pkglist $(getname "$I")"
   done
-  update_remote_database
+  echo "$pkglist"
+  update_remote_database $pkglist
   ;;
 *) usage && exit 1 ;;
 esac

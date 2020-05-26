@@ -44,6 +44,6 @@ mv zpkg "$fullpath$DEST" || exit $?
 # cleanup
 rm -rd "$tmpdir"
 # update database
-ssh "$ssh" sh database_update.sh || exit $?
+ssh "$ssh" sh database_update.sh zpkg || exit $?
 # generate install script
 ssh "$ssh" sh gen_install.sh || exit $?

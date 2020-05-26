@@ -11,7 +11,7 @@ add_package_entry()
 {
   (
     cd "$PKG_PATH"
-    if grep -q -w "$1" installed 2>/dev/null
+    if grep -q -w "^$1" installed 2>/dev/null
     then
       $2 sed "s|$1 .*\$|$1 $(date +%s)|g" -i installed
     else
