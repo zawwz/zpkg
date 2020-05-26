@@ -28,6 +28,7 @@ Options:
 Config (zpkg.conf):
   SSH_ADDRESS         SSH access for deploy
   HTTP_ADDRESS        HTTP address for downloading packages
+  PKG_PATH            Path to the local package database
   ALLOW_ROOT          Set to true to allow running as root without -f. Default: false"
 }
 
