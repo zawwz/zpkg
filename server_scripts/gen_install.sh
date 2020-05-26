@@ -47,22 +47,26 @@ done
 
 shift $((OPTIND-1))
 
-if [ "$(id | cut -d"=" -f2 | cut -d"(" -f1)" -eq 0 ]
+if [ "$(id | cut -d"=" -f2 | cut -d"(" -f1)" -eq 0 ] && [ "$1" != "force" ]
 then
-  echo "Cannot run as root" > /dev/stderr
+  echo "Cannot run as root" >&2
+  echo "Use '$(basename "$0") force' to force running as root"
   exit 10
+else
+  which sudo >/dev/null || { echo "sudo not installed" >&2 && exit 11; }
+  sudo=sudo
 fi
 
 # Generate conf file
-sudo sh -c "{
+$sudo sh -c "{
   echo SSH_ADDRESS=$SSH_USER@$SSH_ADDR
   echo HTTP_ADDRESS=$HTTP_ADDR/$HTTP_PATH
   echo PKG_PATH=pkg
 } > zpkg.conf"
 
 # install config file
-sudo mkdir -p "$config_path" || exit $?
-sudo mv zpkg.conf "$config_path" || exit $?
+$sudo mkdir -p "$config_path" || exit $?
+$sudo mv zpkg.conf "$config_path" || exit $?
 
 # download zpkg
 tmpdir=/tmp/zpkg$(random_string 5)
