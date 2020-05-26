@@ -81,12 +81,12 @@ mkdir -p "$tmpdir" || exit $?
   tar -xf zpkg.tar.xz || exit $?
 
 # install zpkg package
-  ROOT/usr/local/bin/zpkg install zpkg || exit $?
+  ROOT/usr/local/bin/zpkg -f install zpkg || exit $?
 )
 
 # cleanup
 rm -rd "$tmpdir" || exit $?
-zpkg update-database >/dev/null || exit $?
+zpkg -f update-database >/dev/null || exit $?
 
 ' >> install.sh
 mv install.sh "$HOME/$PKG_PATH"
