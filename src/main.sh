@@ -127,7 +127,6 @@ deploy)
     deploy_folder "$I"
     pkglist="$pkglist $(getname "$I")"
   done
-  echo "$pkglist"
   update_remote_database $pkglist
   ;;
 *) usage && exit 1 ;;
