@@ -52,7 +52,7 @@ deploy_folder()
     archive="$(getname "$1").tar.$extension"
     package "$1" "$tmpdirar/$archive" || return $?
     deploy_package "$tmpdirar/$archive" || return $?
-    rm "$tmpdirar"
+    rm -r "$tmpdirar"
   else
     echo "Target '$1' doesn't exist"
   fi

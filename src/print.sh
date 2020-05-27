@@ -29,6 +29,7 @@ Config (zpkg.conf):
   SSH_ADDRESS         SSH access for deploy
   HTTP_ADDRESS        HTTP address for downloading packages
   PKG_PATH            Path to the local package database
+  COMPRESSION         Compression configuration, extension:binary:parallel_binary:options
   ALLOW_ROOT          Set to true to allow running as root without -f. Default: false"
 }
 
@@ -40,7 +41,7 @@ error() {
 package_info() {
   unset cleanup
   status="not installed"
-  grep -wq "^$1" "$PKG_PATH/pkglist" 2>/dev/null || { echo "Package '$I' not found" && return 1; }
+  grep -wq "^$1" "$PKG_PATH/pkglist" 2>/dev/null || { echo "Package '$1' not found" && return 1; }
   grep -wq "^$1" "$PKG_PATH/installed" 2>/dev/null && status=installed
   tmpdir="/tmp/zpkg_$(random_string 5)"
   mkdir -p "$tmpdir" || return $?
