@@ -1,16 +1,14 @@
 # zpkg server config
 
-# address of the SSH server
-SSH_ADDR=example.com
-# user for the SSH server
-SSH_USER=zpkg
-# path to packages for the zpkg user
-PKG_PATH=pkg
-
 # public address of the HTTP server
-HTTP_ADDR=example.com
-# path on server
-HTTP_PATH=zpkg
+HTTP_ADDRESS=http://example.com
+
+# address of the SSH server
+SSH_ADDRESS=user@example.com
+
+# path to packages for the zpkg user
+# this is the target folder available at the HTTP_ADDRESS
+PKG_PATH=pkg
 
 # Compression to use for packages
 # format:

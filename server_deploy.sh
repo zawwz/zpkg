@@ -2,8 +2,6 @@
 
 . "$(pwd)/.config"
 
-ssh="$SSH_USER@$SSH_ADDR"
-
 [ -z "$COMPRESSION" ] && COMPRESSION="xz:xz:pxz"
 extension=$(echo "$COMPRESSION" | cut -d':' -f1)
 compress=$(echo "$COMPRESSION" | cut -d':' -f2)
@@ -21,8 +19,8 @@ random_string()
 ./compile.sh || exit $?
 
 # add sources to server
-ssh "$ssh" mkdir -p "$PKG_PATH" || exit $?
-scp .config server_scripts/* "$ssh":~/ || exit $?
+ssh "$SSH_ADDRESS" mkdir -p "$PKG_PATH" || exit $?
+scp .config server_scripts/* "$SSH_ADDRESS":~/ || exit $?
 
 PKG=zpkg
 DEST=/usr/local/bin
@@ -39,11 +37,11 @@ mv zpkg "$fullpath$DEST" || exit $?
   cd "$tmpdir/$PKG" || exit $?
   tar -cf - * | $pcompress > zpkg.tar.$extension || exit $?
   # send package
-  scp zpkg.tar.$extension "$ssh":~/"$PKG_PATH" || exit $?
+  scp zpkg.tar.$extension "$SSH_ADDRESS":~/"$PKG_PATH" || exit $?
 )
 # cleanup
 rm -rd "$tmpdir"
 # update database
-ssh "$ssh" sh database_update.sh zpkg || exit $?
+ssh "$SSH_ADDRESS" sh database_update.sh zpkg || exit $?
 # generate install script
-ssh "$ssh" sh gen_install.sh || exit $?
+ssh "$SSH_ADDRESS" sh gen_install.sh || exit $?
