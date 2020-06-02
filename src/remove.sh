@@ -1,12 +1,13 @@
 #!/bin/sh
 
 # files from stdin
-# $1 = prefix
+# $1 = from where , $2 = prefix
 delete_files()
 {
+  cd "$1" || return $?
   while read -r in
   do
-    [ -n "$in" ] && $1 rm -d "$in" 2>/dev/null
+    [ -n "$in" ] && $2 rm -d "$in" 2>/dev/null
   done
 }
 
@@ -22,14 +23,10 @@ remove_package()
   fi
   echo "Removing $1"
 
-  ( # delete root files
-    cd /
-    $pcompress -dc "$archive" | tar -tf - ROOT 2>/dev/null | sed 's|^ROOT/||g' | tac | delete_files $2
-  )
-  ( # delete home files
-    cd "$HOME"
-    $pcompress -dc "$archive" | tar -tf - HOME 2>/dev/null | sed 's|^HOME/||g' | tac | delete_files
-  )
+  list=$($pcompress -dc "$archive" | tar -tf - 2>/dev/null)
+
+  echo "$list" | grep "^ROOT/" | sed 's|^ROOT/||g' | tac | delete_files / $2
+  echo "$list" | grep "^HOME/" | sed 's|^HOME/||g' | tac | delete_files "$HOME"
 
   $2 rm "$archive" 2>/dev/null
   $2 sed -i "/^$1 /d" installed

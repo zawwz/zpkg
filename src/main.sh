@@ -66,8 +66,10 @@ install)
     echo "Installing packages: $pkglist"
     for I in $pkglist
     do
-      is_installed $I && remove_package $I $sudo
-      install_package $I $sudo
+      if is_installed $I
+      then upgrade_package $I $sudo
+      else install_package $I $sudo
+      fi
     done
   fi
   ;;
@@ -89,7 +91,7 @@ update)
   o_pkg=$(outdated_packages)
   if [ -n "$r_pkg" ]
   then
-    echo "Removing packages: "$r_pkg
+    echo "Packages to remove: "$r_pkg
     for I in $r_pkg
     do
       remove_package $I $sudo
@@ -97,11 +99,10 @@ update)
   fi
   if [ -n "$o_pkg" ]
   then
-    echo "Updating packages: "$o_pkg
+    echo "Packages to update: "$o_pkg
     for I in $o_pkg
     do
-      remove_package $I $sudo
-      install_package $I $sudo
+      upgrade_package $I $sudo
     done
   fi
   ;;
