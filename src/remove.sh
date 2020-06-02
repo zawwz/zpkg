@@ -5,10 +5,7 @@
 delete_files()
 {
   cd "$1" || return $?
-  while read -r in
-  do
-    [ -n "$in" ] && $2 rm -d "$in" 2>/dev/null
-  done
+  $2 xargs -d '\n' rm -d
 }
 
 # $1 = package , $2 = prefix
@@ -24,7 +21,6 @@ remove_package()
   echo "Removing $1"
 
   list=$($pcompress -dc "$archive" | tar -tf - 2>/dev/null)
-
   echo "$list" | grep "^ROOT/" | sed 's|^ROOT/||g' | tac | delete_files / $2
   echo "$list" | grep "^HOME/" | sed 's|^HOME/||g' | tac | delete_files "$HOME"
 
