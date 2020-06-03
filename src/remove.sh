@@ -5,7 +5,7 @@
 delete_files()
 {
   cd "$1" || return $?
-  $2 xargs -d '\n' rm -d
+  $2 xargs -d '\n' rm -d 2>/dev/null
 }
 
 # $1 = package , $2 = prefix
