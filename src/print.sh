@@ -41,8 +41,8 @@ error() {
 package_info() {
   unset cleanup
   status="not installed"
-  grep -wq "^$1" "$PKG_PATH/pkglist" 2>/dev/null || { echo "Package '$1' not found" && return 1; }
-  grep -wq "^$1" "$PKG_PATH/installed" 2>/dev/null && status=installed
+  grep -q "^$1 " "$PKG_PATH/pkglist" 2>/dev/null || { echo "Package '$1' not found" && return 1; }
+  grep -q "^$1 " "$PKG_PATH/installed" 2>/dev/null && status=installed
   tmpdir="/tmp/zpkg_$(random_string 5)"
   mkdir -p "$tmpdir" || return $?
   pwd="$(pwd)"

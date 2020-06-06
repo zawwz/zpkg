@@ -3,7 +3,7 @@
 deps()
 {
   cd "$PKG_PATH"
-  l=$(grep -w "^$1" pkglist) || return $?
+  l=$(grep "^$1 " pkglist) || return $?
   echo "$l" | cut -d' ' -f3-
 }
 
@@ -18,7 +18,7 @@ resolve_packages()
   cd "$PKG_PATH"
   for I in $*
   do
-    if ! grep -wq "^$I" pkglist 2>/dev/null
+    if ! grep -q "^$I " pkglist 2>/dev/null
     then
       [ "$LOG" = "true" ] && echo "Package '$I' not found" >&2
       RET=1
@@ -46,7 +46,7 @@ resolve_deps()
 is_installed()
 {
   cd "$PKG_PATH"
-  grep -qw "^$1" installed 2>/dev/null
+  grep -q "^$1 " installed 2>/dev/null
   return $?
 }
 
@@ -67,7 +67,7 @@ removed_packages()
   cat installed 2>/dev/null | while read -r in
   do
     name=$(echo "$in" | awk '{print $1}')
-    rem=$(grep -w "^$name" pkglist | awk '{print $2}')
+    rem=$(grep "^$name " pkglist | awk '{print $2}')
     [ -z "$rem" ] && echo $name
   done
 }
@@ -79,7 +79,7 @@ outdated_packages()
   do
     name=$(echo "$in" | awk '{print $1}')
     loc=$(echo "$in" | awk '{print $2}')
-    rem=$(grep -w "^$name" pkglist | awk '{print $2}')
+    rem=$(grep "^$name " pkglist | awk '{print $2}')
     [ -n "$rem" ] && [ "$loc" -lt "$rem" ] && echo $name
   done
 }

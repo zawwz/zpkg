@@ -13,7 +13,7 @@ remove_package()
 {
   cd "$PKG_PATH"
   archive="$(pwd)/$1.tar.$extension"
-  if [ ! -f "$archive" ] || ! grep -q -w "^$1" installed
+  if [ ! -f "$archive" ] || ! grep -q "^$1 " installed
   then
     echo "Package '$1' not installed" >&2
     return 1
