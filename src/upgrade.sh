@@ -23,7 +23,7 @@ upgrade_package()
     fetch_package "$1" || { echo "Package '$1' not found" >&2 && return 1; }
     unpack "$1.tar.$extension" || return $?
 
-    oldlist=$($pcompress -dc "$PKG_PATH/$1.tar.$extension" | tar -tf - 2>/dev/null | sort)
+    oldlist=$(cat "$PKG_PATH/$1.tar.$extension" | $pcompress -dc 2>/dev/null | tar -tf - 2>/dev/null | sort)
     echo "$oldlist" | grep "^ROOT/" | to_delete - ROOT | sed 's|^ROOT/||g' | tac | delete_files / $2
     echo "$oldlist" | grep "^HOME/" | to_delete - HOME | sed 's|^HOME/||g' | tac | delete_files "$HOME"
 

@@ -3,7 +3,7 @@
 unpack()
 {
   echo "Unpacking $1"
-  $pcompress -dc "$1" | tar -xf -
+  cat "$1" | $pcompress -dc 2>/dev/null | tar -xf -
 }
 
 # $1 = package , $2 = prefix

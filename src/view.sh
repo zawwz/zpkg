@@ -9,7 +9,7 @@ deps()
 
 # $1 = pkg file
 desc() {
-  $pcompress -dc "$1" | tar -xOf - DESC
+  cat "$1" | $pcompress -dc 2>/dev/null | tar -xOf - DESC
 }
 
 resolve_packages()
@@ -52,7 +52,7 @@ is_installed()
 
 # $1 = file
 view_package_file() {
-  tree=$($pcompress -dc "$1" 2>/dev/null | tar -tf - 2>/dev/null) || exit $?
+  tree=$(cat "$1" | $pcompress -dc 2>/dev/null | tar -tf - 2>/dev/null) || exit $?
   echo "$tree" | grep -E '^ROOT/|^HOME/' | sed "/\/$/d ; s|^ROOT/|/|g ; s|^HOME/|$HOME/|g" 2>/dev/null
 }
 

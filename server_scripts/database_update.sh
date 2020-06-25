@@ -28,7 +28,7 @@ fi
 for I in $list
 do
   TIME=$(stat -c "%Y" "$I.tar.$extension")
-  DEPS=$($pcompress -dc "$I.tar.$extension" | tar -xOf - DEPS 2>/dev/null | tr -s '\n\t ' ' ')
+  DEPS=$(cat "$I.tar.$extension" | $pcompress -dc 2>/dev/null | tar -xOf - DEPS 2>/dev/null | tr -s '\n\t ' ' ')
   if grep -q -w "^$I" pkglist 2>/dev/null
   then
     sed -i "s|^$I .*\$|$I $TIME $DEPS|g" pkglist

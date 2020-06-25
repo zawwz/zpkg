@@ -20,7 +20,7 @@ remove_package()
   fi
   echo "Removing $1"
 
-  list=$($pcompress -dc "$archive" | tar -tf - 2>/dev/null)
+  list=$(cat "$archive" | $pcompress -dc 2>/dev/null | tar -tf - 2>/dev/null)
   echo "$list" | grep "^ROOT/" | sed 's|^ROOT/||g' | tac | delete_files / $2
   echo "$list" | grep "^HOME/" | sed 's|^HOME/||g' | tac | delete_files "$HOME"
 
