@@ -52,7 +52,7 @@ is_installed()
 
 # $1 = file
 view_package_file() {
-  tree=$($pcompress -dc "$1" | tar -tf - 2>/dev/null) || exit $?
+  tree=$($pcompress -dc "$1" 2>/dev/null | tar -tf - 2>/dev/null) || exit $?
   echo "$tree" | grep -E '^ROOT/|^HOME/' | sed "/\/$/d ; s|^ROOT/|/|g ; s|^HOME/|$HOME/|g" 2>/dev/null
 }
 

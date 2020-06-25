@@ -13,10 +13,10 @@ Requirements:
 - sudo
 - wget
 - tar
-- xz/gz
+- xz/gzip
 
 Optional:
-- pxz/pigz (faster compression/decompression)
+- pixz/pigz (faster compression/decompression)
 
 ### Installing
 

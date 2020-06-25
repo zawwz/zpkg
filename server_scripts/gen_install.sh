@@ -12,7 +12,7 @@ cat .config >> install.sh
 echo '
 
 # resolve compression
-[ -z "$COMPRESSION" ] && COMPRESSION="xz:xz:pxz"
+[ -z "$COMPRESSION" ] && COMPRESSION="xz:xz:pixz"
 extension=$(echo "$COMPRESSION" | cut -d":" -f1)
 compress=$(echo "$COMPRESSION" | cut -d":" -f2)
 pcompress=$(echo "$COMPRESSION" | cut -d":" -f3)

@@ -34,7 +34,7 @@ root_check && [ -z "$opt_f" ] && [ "$ALLOW_ROOT" != "true" ] && echo "Cannot run
 [ ! -d "$PKG_PATH" ] && $sudo mkdir -p "$PKG_PATH"
 
 # resolve compression
-[ -z "$COMPRESSION" ] && COMPRESSION="xz:xz:pxz"
+[ -z "$COMPRESSION" ] && COMPRESSION="xz:xz:pixz"
 extension=$(echo "$COMPRESSION" | cut -d':' -f1)
 compress=$(echo "$COMPRESSION" | cut -d':' -f2)
 pcompress=$(echo "$COMPRESSION" | cut -d':' -f3)

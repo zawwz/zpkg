@@ -13,4 +13,4 @@ PKG_PATH=pkg
 # Compression to use for packages
 # format:
 #   extension:binary:parallel_binary:arguments
-COMPRESSION=xz:xz:pxz:-1
+COMPRESSION=xz:xz:pixz:-1
