@@ -86,7 +86,7 @@ mkdir -p "$tmpdir" || exit $?
     echo "Cannot reach $HTTP_ADDRESS" > /dev/stderr
     exit 1
   fi
-  cat "$zpkg.tar.$extension" | $pcompress -dc 2>/dev/null | tar -xf - || exit $?
+  cat "zpkg.tar.$extension" | $pcompress -dc 2>/dev/null | tar -xf - || exit $?
 
 # install zpkg package
   ROOT/usr/local/bin/zpkg -f install zpkg || exit $?
