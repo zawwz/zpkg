@@ -14,6 +14,7 @@ to_delete()
 # $1 = package , $2 = prefix
 upgrade_package()
 {
+  [ "$1" = "$fname" ] && [ -z "$opt_R" ] && _self_update=y && return 0
   echo "Updating $1"
   tmpdir="/tmp/zpkg_$(random_string 5)"
   mkdir -p "$tmpdir"
@@ -35,4 +36,16 @@ upgrade_package()
   ret=$?
   rm -rd "$tmpdir" 2>/dev/null
   return $ret
+}
+
+## self upgrading mitigation
+
+unset _self_update
+_tmpzpkg="/tmp/zpkg_bin_$(random_string 5)"
+gen_self_update()
+{
+  # copy current file
+  cp "$0" "$_tmpzpkg" || return $?
+  # make new script self-delete
+  echo 'rm -f "$0"' >> "$_tmpzpkg"
 }

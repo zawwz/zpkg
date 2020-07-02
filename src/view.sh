@@ -2,9 +2,11 @@
 
 deps()
 {
+  (
   cd "$PKG_PATH"
   l=$(grep "^$1 " pkglist) || return $?
   echo "$l" | cut -d' ' -f3-
+  )
 }
 
 # $1 = pkg file
@@ -15,6 +17,7 @@ desc() {
 resolve_packages()
 {
   RET=0
+  (
   cd "$PKG_PATH"
   for I in $*
   do
@@ -27,6 +30,7 @@ resolve_packages()
     fi
   done
   return $RET
+  )
 }
 
 # env: INCLUDE_PACKAGES
@@ -45,9 +49,10 @@ resolve_deps()
 
 is_installed()
 {
+  (
   cd "$PKG_PATH"
   grep -q "^$1 " installed 2>/dev/null
-  return $?
+  )
 }
 
 # $1 = file
@@ -58,11 +63,12 @@ view_package_file() {
 
 # $1 = package name
 view_package() {
-  cd "$PKG_PATH" && view_package_file "$1.tar.$extension"
+  ( cd "$PKG_PATH" && view_package_file "$1.tar.$extension" )
 }
 
 removed_packages()
 {
+  (
   cd "$PKG_PATH"
   cat installed 2>/dev/null | while read -r in
   do
@@ -70,10 +76,12 @@ removed_packages()
     rem=$(grep "^$name " pkglist | awk '{print $2}')
     [ -z "$rem" ] && echo $name
   done
+  )
 }
 
 outdated_packages()
 {
+  (
   cd "$PKG_PATH"
   cat installed 2>/dev/null | while read -r in
   do
@@ -82,4 +90,5 @@ outdated_packages()
     rem=$(grep "^$name " pkglist | awk '{print $2}')
     [ -n "$rem" ] && [ "$loc" -lt "$rem" ] && echo $name
   done
+  )
 }

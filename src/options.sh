@@ -1,25 +1,15 @@
 #!/bin/sh
 
-unset opt_f
+unset opt_f opt_R
 
-while getopts ":hc:f" opt;
+while getopts ":hc:fR" opt;
 do
   case $opt in
-    h)
-      usage
-      exit 0
-      ;;
-    c)
-      config_path="$OPTARG"
-      ;;
-    f)
-      opt_f="y"
-      ;;
-    \?)
-      echo "Uknown option: $OPTARG"
-      usage
-      exit 1
-      ;;
+    h) usage ; exit 1 ;;
+    c) config_path="$OPTARG" ;;
+    f) opt_f=y ;;
+    R) opt_R=y ;;
+    \?) echo "Uknown option: $OPTARG" ; usage ; exit 1 ;;
     esac
 done
 

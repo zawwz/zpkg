@@ -24,6 +24,7 @@ Options:
   -h          Display this help
   -c <path>   Custom config path. Default /etc/zpkg
   -f          Force running when root
+  -R          Don't do self-update mitigation
 
 Config (zpkg.conf):
   SSH_ADDRESS         SSH access for deploy

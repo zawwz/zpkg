@@ -11,6 +11,7 @@ fetch_package()
 # $1 = prefix
 fetch_pkglist()
 {
+  (
   cd "$PKG_PATH"
   $1 mv pkglist pkglist_bak 2>/dev/null
   if ! $1 wget "$HTTP_ADDRESS/pkglist" -q --show-progress -O pkglist 2>&1
@@ -22,4 +23,5 @@ fetch_pkglist()
     $1 rm pkglist_bak 2>/dev/null
     return 0
   fi
+  )
 }

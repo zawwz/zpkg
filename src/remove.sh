@@ -11,6 +11,7 @@ delete_files()
 # $1 = package , $2 = prefix
 remove_package()
 {
+  (
   cd "$PKG_PATH"
   archive="$(pwd)/$1.tar.$extension"
   if [ ! -f "$archive" ] || ! grep -q "^$1 " installed
@@ -26,4 +27,5 @@ remove_package()
 
   $2 rm "$archive" 2>/dev/null
   $2 sed -i "/^$1 /d" installed
+  )
 }
