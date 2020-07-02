@@ -28,6 +28,7 @@ fi
 
 # resolve relative pkg_path
 PKG_PATH="$(resolve_path "$PKG_PATH" "$config_path")"
+[ -z "$UPDATE_REMOVE" ] && UPDATE_REMOVE=true
 
 root_check && [ -z "$opt_f" ] && [ "$ALLOW_ROOT" != "true" ] && echo "Cannot run as root" >&2 && exit 10
 

@@ -89,7 +89,7 @@ update)
   fetch_pkglist $sudo || exit 1
   r_pkg=$(removed_packages)
   o_pkg=$(outdated_packages)
-  if [ -n "$r_pkg" ]
+  if [ -n "$r_pkg" ] && [ "$UPDATE_REMOVE" = "true" ]
   then
     echo "Packages to remove: "$r_pkg
     for I in $r_pkg

@@ -30,7 +30,8 @@ Config (zpkg.conf):
   HTTP_ADDRESS        HTTP address for downloading packages
   PKG_PATH            Path to the local package database
   COMPRESSION         Compression configuration, extension:binary:parallel_binary:options
-  ALLOW_ROOT          Set to true to allow running as root without -f. Default: false"
+  ALLOW_ROOT          Set to true to allow running as root without -f. Default: false
+  UPDATE_REMOVE       Remove packages on update. Default: true"
 }
 
 error() {
@@ -39,15 +40,18 @@ error() {
 
 # $1 = package name
 package_info() {
-  unset cleanup
-  status="not installed"
-  grep -q "^$1 " "$PKG_PATH/pkglist" 2>/dev/null || { echo "Package '$1' not found" && return 1; }
-  grep -q "^$1 " "$PKG_PATH/installed" 2>/dev/null && status=installed
+  # prepare
   tmpdir="/tmp/zpkg_$(random_string 5)"
   mkdir -p "$tmpdir" || return $?
   pwd="$(pwd)"
-
   cd "$tmpdir"
+
+  # get status
+  status="not installed"
+  grep -q "^$1 " "$PKG_PATH/pkglist" 2>/dev/null || { echo "Package '$1' not found" && return 1; }
+  grep -q "^$1 " "$PKG_PATH/installed" 2>/dev/null && status=installed
+
+  # get and unpack
   if [ "$status" = "installed" ] && [ -f "$PKG_PATH/$1.tar.$extension" ]
   then
     pkg="$PKG_PATH/$1.tar.$extension"
@@ -56,11 +60,11 @@ package_info() {
     pkg="$1.tar.$extension"
   fi
   unpack "$pkg" >/dev/null
-  deps=$(cat DEPS 2>/dev/null)
+  # extract values
+  deps=$(cat DEPS 2>/dev/null | tr -s ' \t\n' ' ')
   desc=$(cat DESC 2>/dev/null)
   csize=$(stat -c '%s' "$pkg" | numfmt --to=iec-i --suffix=B --padding 6)
   isize=$(du -sb ROOT HOME 2>/dev/null | awk '{print $1}' | paste -sd+ | bc | numfmt --to=iec-i --suffix=B --padding 6)
-  [ -n "$cleanup" ] && { cd "$pwd"; rm -rd "$tmpdir"; }
 
   cd "$pwd"
   rm -rf "$tmpdir"

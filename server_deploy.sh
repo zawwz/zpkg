@@ -23,7 +23,7 @@ ssh "$SSH_ADDRESS" mkdir -p "$PKG_PATH" || exit $?
 scp .config server_scripts/* "$SSH_ADDRESS":~/ || exit $?
 
 PKG=zpkg
-DEST=/usr/local/bin
+DEST=/usr/bin
 BASHDEST=/etc/bash_completion.d
 tmpdir="/tmp/zpkg$(random_string 5)"
 fullpath="$tmpdir/$PKG/ROOT"

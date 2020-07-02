@@ -66,10 +66,13 @@ fi
 
 # Generate conf file
 $sudo sh -c "{
-  echo SSH_ADDRESS=$SSH_ADDRESS
-  echo HTTP_ADDRESS=$HTTP_ADDRESS
-  echo COMPRESSION=$COMPRESSION
-  echo PKG_PATH=pkg
+  echo "# zpkg config file
+SSH_ADDRESS=$SSH_ADDRESS
+HTTP_ADDRESS=$HTTP_ADDRESS
+COMPRESSION=$COMPRESSION
+PKG_PATH=pkg"
+ALLOW_ROOT=false
+UPDATE_REMOVE=true
 } > zpkg.conf"
 
 # install config file
@@ -89,7 +92,7 @@ mkdir -p "$tmpdir" || exit $?
   cat "zpkg.tar.$extension" | $pcompress -dc 2>/dev/null | tar -xf - || exit $?
 
 # install zpkg package
-  ROOT/usr/local/bin/zpkg -f install zpkg || exit $?
+  ROOT/usr/bin/zpkg -f install zpkg || exit $?
 )
 
 # cleanup
