@@ -5,7 +5,7 @@ Basic and simple packaging system
 Designed to be used by anyone and deployed anywhere,
 it is a very basic packaging system with basic functionnality but very portable
 
-Official repo: [http://zpkg.zawz.net](http://zpkg.zawz.net)
+Official repo: [https://zpkg.zawz.net](https://zpkg.zawz.net)
 
 ## As user
 
@@ -21,7 +21,7 @@ Optional:
 ### Installing
 
 ```shell
-wget http://zpkg.zawz.net/install.sh
+wget https://zpkg.zawz.net/install.sh
 sh install.sh
 ```
 > By default the config is installed to /etc/zpkg

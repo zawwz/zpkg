@@ -1,7 +1,7 @@
 # zpkg server config
 
 # public address of the HTTP server
-HTTP_ADDRESS=http://example.com
+HTTP_ADDRESS=https://example.com
 
 # address of the SSH server
 SSH_ADDRESS=user@example.com
