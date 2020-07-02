@@ -55,7 +55,7 @@ info)
   fi
   ;;
 install)
-  fetch_pkglist $sudo || exit $?
+  fetch_pkglist $sudo > $_OUTPUT || exit $?
   if [ -z "$2" ]
   then
     echo "No package specified" >&2
@@ -63,7 +63,7 @@ install)
     shift 1
     pkglist=$(LOG=true resolve_packages $*) || exit $?
     pkglist=$(INCLUDE_PACKAGES=true resolve_deps $* | tr '\n' ' ')
-    echo "Installing packages: $pkglist"
+    echo "Installing packages: $pkglist" > $_OUTPUT
     for I in $pkglist
     do
       if is_installed $I
@@ -133,4 +133,4 @@ deploy)
 *) usage && exit 1 ;;
 esac
 
-[ -n "$_self_update" ] && gen_self_update && exec "$_tmpzpkg" -R install zpkg
+[ -n "$_self_update" ] && gen_self_update && _ZPKG_SELF_UPGRADE=y exec "$_tmpzpkg" -R install zpkg

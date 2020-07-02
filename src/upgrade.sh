@@ -41,9 +41,9 @@ upgrade_package()
 ## self upgrading mitigation
 
 unset _self_update
-_tmpzpkg="/tmp/zpkg_bin_$(random_string 5)"
 gen_self_update()
 {
+  _tmpzpkg="/tmp/zpkg_bin_$(random_string 5)"
   # copy current file
   cp "$0" "$_tmpzpkg" || return $?
   # make new script self-delete
