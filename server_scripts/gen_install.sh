@@ -11,6 +11,8 @@ cat .config >> install.sh
 # body
 echo '
 
+[ -z "$TMPDIR" ] && TMPDIR=/tmp
+
 # resolve compression
 [ -z "$COMPRESSION" ] && COMPRESSION="xz:xz:pixz"
 extension=$(echo "$COMPRESSION" | cut -d":" -f1)
@@ -65,22 +67,20 @@ else
 fi
 
 # Generate conf file
-$sudo sh -c "{
-  echo "# zpkg config file
+$sudo sh -c "echo \"# zpkg config file
 SSH_ADDRESS=$SSH_ADDRESS
 HTTP_ADDRESS=$HTTP_ADDRESS
 COMPRESSION=$COMPRESSION
-PKG_PATH=pkg"
+PKG_PATH=pkg
 ALLOW_ROOT=false
-UPDATE_REMOVE=true
-} > zpkg.conf"
+UPDATE_REMOVE=true\" > zpkg.conf"
 
 # install config file
 $sudo mkdir -p "$config_path" || exit $?
 $sudo mv zpkg.conf "$config_path" || exit $?
 
 # download zpkg
-tmpdir=/tmp/zpkg$(tr -cd "[:alnum:]" < /dev/urandom | head -c5)
+tmpdir=$TMPDIR/zpkg$(tr -cd "[:alnum:]" < /dev/urandom | head -c5)
 mkdir -p "$tmpdir" || exit $?
 (
   cd "$tmpdir" || exit $?

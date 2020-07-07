@@ -2,6 +2,8 @@
 
 . "$(pwd)/.config"
 
+[ -z "$TMPDIR" ] && TMPDIR=/tmp
+
 # resolve compression
 [ -z "$COMPRESSION" ] && COMPRESSION="xz:xz:pixz"
 extension=$(echo "$COMPRESSION" | cut -d':' -f1)
@@ -38,7 +40,7 @@ do
 done
 
 # remove inexistant
-tmpfile="/tmp/pkglist_$(tr -cd '[:alnum:]' </dev/urandom | head -c10)"
+tmpfile="$TMPDIR/pkglist_$(tr -cd '[:alnum:]' </dev/urandom | head -c10)"
 awk '{print $1}' pkglist | sort > "$tmpfile"
 for I in $(echo "$fulllist" | sort | diff --new-line-format="" --unchanged-line-format="" "$tmpfile" -)
 do

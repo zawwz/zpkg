@@ -107,14 +107,14 @@ update)
   fi
   ;;
 list-outdated)
-  tmpdir="/tmp/zpkg_$(random_string 5)"
+  tmpdir="$TMPDIR/zpkg_$(random_string 5)"
   virtual_config_path "$tmpdir" || exit $?
   fetch_pkglist > /dev/null || exit $?
   outdated_packages
   rm -rd "$tmpdir"
   ;;
 list-removed)
-  tmpdir="/tmp/zpkg_$(random_string 5)"
+  tmpdir="$TMPDIR/zpkg_$(random_string 5)"
   virtual_config_path "$tmpdir" || exit $?
   fetch_pkglist > /dev/null || exit $?
   removed_packages

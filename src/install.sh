@@ -30,7 +30,7 @@ install_package()
 {
   [ "$1" = "$fname" ] && [ -z "$opt_R" ] && _self_update=y && return 0
   echo "Installing $1"
-  tmpdir="/tmp/zpkg_$(random_string 5)"
+  tmpdir="$TMPDIR/zpkg_$(random_string 5)"
   mkdir -p "$tmpdir"
   (
     cd "$tmpdir"

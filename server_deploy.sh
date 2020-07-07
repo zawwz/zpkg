@@ -2,6 +2,8 @@
 
 . "$(pwd)/.config"
 
+[ -z "$TMPDIR" ] && TMPDIR=/tmp
+
 [ -z "$COMPRESSION" ] && COMPRESSION="xz:xz:pixz"
 extension=$(echo "$COMPRESSION" | cut -d':' -f1)
 compress=$(echo "$COMPRESSION" | cut -d':' -f2)
@@ -25,7 +27,7 @@ scp .config server_scripts/* "$SSH_ADDRESS":~/ || exit $?
 PKG=zpkg
 DEST=/usr/bin
 BASHDEST=/etc/bash_completion.d
-tmpdir="/tmp/zpkg$(random_string 5)"
+tmpdir="$TMPDIR/zpkg$(random_string 5)"
 fullpath="$tmpdir/$PKG/ROOT"
 # setup package sources
 mkdir -p "$fullpath$DEST" || exit $?

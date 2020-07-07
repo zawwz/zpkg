@@ -16,7 +16,7 @@ upgrade_package()
 {
   [ "$1" = "$fname" ] && [ -z "$opt_R" ] && _self_update=y && return 0
   echo "Updating $1"
-  tmpdir="/tmp/zpkg_$(random_string 5)"
+  tmpdir="$TMPDIR/zpkg_$(random_string 5)"
   mkdir -p "$tmpdir"
   (
     # fetch package
@@ -43,7 +43,7 @@ upgrade_package()
 unset _self_update
 gen_self_update()
 {
-  _tmpzpkg="/tmp/zpkg_bin_$(random_string 5)"
+  _tmpzpkg="$TMPDIR/zpkg_bin_$(random_string 5)"
   # copy current file
   cp "$0" "$_tmpzpkg" || return $?
   # make new script self-delete

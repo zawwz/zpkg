@@ -10,7 +10,7 @@ package()
   unset tmpdir
   if [ ! -d "$src/ROOT" ] && [ ! -d "$src/HOME" ] && [ ! -f "$src/DEPS" ] && [ ! -f "$src/DESC" ]
   then
-    tmpdir="/tmp/zpkg_$(random_string 5)"
+    tmpdir="$TMPDIR/zpkg_$(random_string 5)"
     mkdir -p "$tmpdir"
     cp -r "$src" "$tmpdir/ROOT"
     src="$tmpdir"
@@ -47,7 +47,7 @@ deploy_folder()
     deploy_package "$1" "$1" || return $?
   elif [ -d "$1" ] # folder
   then
-    tmpdirar="/tmp/zpkg_$(random_string 5)"
+    tmpdirar="$TMPDIR/zpkg_$(random_string 5)"
     mkdir -p "$tmpdirar"
     archive="$(getname "$1").tar.$extension"
     package "$1" "$tmpdirar/$archive" || return $?

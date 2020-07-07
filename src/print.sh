@@ -42,7 +42,7 @@ error() {
 # $1 = package name
 package_info() {
   # prepare
-  tmpdir="/tmp/zpkg_$(random_string 5)"
+  tmpdir="$TMPDIR/zpkg_$(random_string 5)"
   mkdir -p "$tmpdir" || return $?
   pwd="$(pwd)"
   cd "$tmpdir"
