@@ -1,0 +1,72 @@
+#!/bin/sh
+
+fname=$(basename "$0")
+usage()
+{
+  echo "$fname <file>
+Compile the target shell script into a single output
+Resolves '%include' lines with shell capacity"
+}
+
+# no arg
+[ $# -lt 1 ] && usage && exit 1
+
+[ -z "$TMPDIR" ] && TMPDIR=/tmp
+tmpdir="$TMPDIR/shcompile_$(tr -dc '[:alnum:]' < /dev/urandom | head -c10)"
+mkdir -p "$tmpdir"
+tmpfile="$tmpdir/ret"
+filelist="$tmpdir/list"
+headfile="$tmpdir/head"
+tailfile="$tmpdir/tail"
+
+stop()
+{
+  rm -rf "$tmpdir"
+  exit $1
+}
+
+infile=$1
+[ "$infile" = '-' ] && infile=/dev/stdin
+
+cat "$infile" >/dev/null 2>&1 || { echo "Error: cannot read '$infile'" >&2 && stop 2; }
+
+firstline=$(head -n1 "$infile" | grep '^#!/')
+[ -z "$firstline" ] && firstline='#!/bin/sh'
+
+cp "$infile" "$tmpfile"
+
+get_include_line()
+{
+  grep -m1 -n '^%include ' "$1" | cut -d':' -f1
+}
+
+echo "$1" > "$filelist"
+
+n=$(get_include_line "$tmpfile")
+while [ -n "$n" ]
+do
+  pre=$(head -n $((n-1)) "$tmpfile" > "$headfile")
+  post=$(tail -n +$((n+1)) "$tmpfile" > "$tailfile")
+  incarg=$(sed "$n""q;d" "$tmpfile" | cut -d ' ' -f2-)
+  inc=$(echo "for I in $incarg ; do echo \$I ; done" | sh)
+
+  cp "$headfile" "$tmpfile"
+  echo "$inc" | while read -r file
+  do
+    cat "$file" >/dev/null 2>&1 || { echo "Error when trying to include '$incarg': '$ln' could not be read" >&2 && stop 10; }
+    if ! grep -q "^$file\$" "$filelist"
+    then # not already included
+      cat "$file" >> "$tmpfile"
+      echo "$file" >> "$filelist"
+    fi
+  done
+  cat "$tailfile" >> "$tmpfile"
+  # get next include line
+  n=$(get_include_line "$tmpfile")
+done
+
+which shfmt >/dev/null 2>&1 && shfmt -w -mn "$tmpfile"
+echo "$firstline"
+cat "$tmpfile"
+
+stop 0

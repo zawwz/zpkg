@@ -1,24 +1,6 @@
 #!/bin/sh
 
-# config
-# no spaces in srcdir or ordered files
-SRCDIR=src
-ordered='env.sh options.sh config.sh main.sh'
+cd "$(dirname "$(readlink -f "$0")")"
 
-# process
-COMMENTSCRIPT="/^\s*#/d;s/\s*#[^\"']*$//"
-
-# order list
-unset namefind list
-for I in $ordered
-do
-  namefind="$namefind ! -name $I"
-  list="$list $SRCDIR/$I"
-done
-
-findlist=$(find "$SRCDIR" -type f $namefind)
-
-# create file
-echo '#!/bin/sh' > zpkg
-sed $COMMENTSCRIPT $findlist $list >> zpkg
+scripts/shcompile src/main.sh > zpkg
 chmod +x zpkg

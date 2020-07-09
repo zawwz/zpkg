@@ -1,5 +1,14 @@
 #!/bin/sh
 
+# ordered requirements
+%include src/util.sh
+%include src/env.sh
+%include src/options.sh
+%include src/config.sh
+
+# everything else
+%include src/*.sh
+
 case "$1" in
 list) awk '{print $1}' "$PKG_PATH/installed" 2>/dev/null | sort ;;
 list-all) awk '{print $1}' "$PKG_PATH/pkglist" 2>/dev/null | sort ;;

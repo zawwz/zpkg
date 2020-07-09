@@ -17,6 +17,7 @@ Requirements:
 
 Optional:
 - pixz/pigz (faster compression/decompression)
+- shfmt (minimize zpkg on compile)
 
 ### Installing
 
