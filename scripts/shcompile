@@ -9,7 +9,14 @@ Resolves '%include' lines with shell capacity"
 }
 
 # no arg
-[ $# -lt 1 ] && usage && exit 1
+unset infile
+if [ $# -lt 1 ]
+then
+  if ! [ -t 0 ]
+  then infile=/dev/stdin
+  else usage && exit 1
+  fi
+fi
 
 [ -z "$TMPDIR" ] && TMPDIR=/tmp
 tmpdir="$TMPDIR/shcompile_$(tr -dc '[:alnum:]' < /dev/urandom | head -c10)"
@@ -25,22 +32,27 @@ stop()
   exit $1
 }
 
-infile=$1
+[ -z "$infile" ] && infile=$1
+dirname=$()
 [ "$infile" = '-' ] && infile=/dev/stdin
 
-cat "$infile" >/dev/null 2>&1 || { echo "Error: cannot read '$infile'" >&2 && stop 2; }
+# create copy
+cat "$infile" > "$tmpfile" 2>&1 || { echo "Error: cannot read '$infile'" >&2 && stop 2; }
 
-firstline=$(head -n1 "$infile" | grep '^#!/')
+# env when file
+[ "$infile" != "/dev/stdin" ] && {
+  echo "$(readlink -f "$infile")" > "$filelist"
+  cd "$(dirname "$infile")"
+}
+
+firstline=$(head -n1 "$tmpfile" | grep '^#!/')
+
 [ -z "$firstline" ] && firstline='#!/bin/sh'
-
-cp "$infile" "$tmpfile"
 
 get_include_line()
 {
   grep -m1 -n '^%include ' "$1" | cut -d':' -f1
 }
-
-echo "$1" > "$filelist"
 
 n=$(get_include_line "$tmpfile")
 while [ -n "$n" ]
@@ -53,12 +65,13 @@ do
   cp "$headfile" "$tmpfile"
   echo "$inc" | while read -r file
   do
-    cat "$file" >/dev/null 2>&1 || { echo "Error when trying to include '$incarg': '$ln' could not be read" >&2 && stop 10; }
-    if ! grep -q "^$file\$" "$filelist"
+    cat "$file" >/dev/null 2>&1 || { echo "Error when trying to include '$incarg': '$file' could not be read" >&2 && stop 10; }
+    if ! grep -q "^$(readlink -f "$file")\$" "$filelist"
     then # not already included
       cat "$file" >> "$tmpfile"
-      echo "$file" >> "$filelist"
+      echo "$(readlink -f "$file")" >> "$filelist"
     fi
+    cd "$pwd"
   done
   cat "$tailfile" >> "$tmpfile"
   # get next include line
