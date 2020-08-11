@@ -1,5 +1,6 @@
 #!/bin/sh
 
+# $1 = file , $2 = prefix
 unpack()
 {
   echo "Unpacking $1"
@@ -16,11 +17,12 @@ add_package_entry()
       $2 sed "s|$1 .*\$|$1 $(date +%s)|g" -i installed
     else
       $2 sh -c "echo '$1 $(date +%s)' >> installed"
+      $2 chmod a+r installed
     fi
   )
 }
 
-# $1 = source_dir, $2 = dest_dir, $3 = prefix for exec
+# $1 = source_dir , $2 = dest_dir , $3 = prefix
 copy_files() {
   $3 cp -r "$1/." "$2"
 }
@@ -33,11 +35,15 @@ install_package()
   tmpdir="$TMPDIR/zpkg_$(random_string 5)"
   mkdir -p "$tmpdir"
   (
-    cd "$tmpdir"
+    cd "$tmpdir" || exit $?
     fetch_package "$1" || { echo "Package '$1' not found" >&2 && return 1; }
     $2 cp "$1.tar.$extension" "$PKG_PATH"
-    unpack "$1.tar.$extension" || return $?
-    copy_files ROOT / $2 2>/dev/null
+    $2 chmod a+r "$PKG_PATH/$1.tar.$extension"
+    (
+      umask a+rx
+      unpack "$1.tar.$extension" $2 || return $?
+      copy_files ROOT / $2 o+rx 2>/dev/null || return $?
+    ) || return $?
     copy_files HOME "$HOME" 2>/dev/null
     add_package_entry "$1" $2
   )

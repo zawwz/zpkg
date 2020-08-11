@@ -77,7 +77,9 @@ UPDATE_REMOVE=true\" > zpkg.conf"
 
 # install config file
 $sudo mkdir -p "$config_path" || exit $?
+$sudo chmod a+rx "$config_path" 2>/dev/null
 $sudo mv zpkg.conf "$config_path" || exit $?
+$sudo chmod a+r "$config_path/zpkg.conf" 2>/dev/null
 
 # download zpkg
 tmpdir=$TMPDIR/zpkg$(tr -cd "[:alnum:]" < /dev/urandom | head -c5)

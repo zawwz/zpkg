@@ -12,7 +12,7 @@ fetch_package()
 fetch_pkglist()
 {
   (
-  cd "$PKG_PATH"
+  cd "$PKG_PATH" || exit $?
   $1 mv pkglist pkglist_bak 2>/dev/null
   if ! $1 wget "$HTTP_ADDRESS/pkglist" -q --show-progress -O pkglist 2>&1
   then
@@ -20,6 +20,7 @@ fetch_pkglist()
     $1 mv pkglist_bak pkglist 2>/dev/null
     return 1
   else
+    $1 chmod a+r pkglist
     $1 rm pkglist_bak 2>/dev/null
     return 0
   fi

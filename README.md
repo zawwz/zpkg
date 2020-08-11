@@ -57,9 +57,9 @@ You need to be able to SSH to the zpkg user, SSH keys are recommended
 
 1. Write the desired config in `.config`, see `.config.example`
 
-2. Run `server_deploy.sh`
+2. Run `make`
 
-3. Make available the package directory to the HTTP server
+3. Expose the package directory to the HTTP server
 
 ### Package architecture
 
@@ -72,16 +72,20 @@ You need to be able to SSH to the zpkg user, SSH keys are recommended
 +-- HOME
      +-- ~
 ```
-- The ROOT directory represents the root filesystem  
-- The HOME directory represents the home directory of the user  
+- The ROOT directory represents the root filesystem
+- The HOME directory represents the home directory of the user
 - The DEPS file contains dependency packages separated by spaces or newlines. Dependencies are package names from the repository
 - The DESC file contains the description of the package
 
 ### Deploying packages
 
-`zpkg deploy <dir...>`  
-> Target directories are structured as described above  
+`zpkg deploy <dir...>`
+> Target directories are structured as described above <br>
 > The name of the directory is the package name
+
+### Updating
+
+`git pull && make`
 
 ## Functionality
 

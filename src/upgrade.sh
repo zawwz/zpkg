@@ -31,6 +31,7 @@ upgrade_package()
     copy_files ROOT / $2 2>/dev/null
     copy_files HOME "$HOME" 2>/dev/null
     $2 cp "$1.tar.$extension" "$PKG_PATH"
+    $2 chmod a+r "$PKG_PATH/$1.tar.$extension"
     add_package_entry "$1" $2
   )
   ret=$?

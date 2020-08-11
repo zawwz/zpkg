@@ -1,6 +1,3 @@
 /.config
-/pkg
 /Zmakefile
-/autodeploy.sh
-/.deploytime
 /zpkg

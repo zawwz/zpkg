@@ -22,16 +22,25 @@ if ! root_check ; then
 fi
 
 [ ! -d "$config_path" ] && { $sudo mkdir -p "$config_path" 2>/dev/null || exit $?; }
-[ ! -f "$config_file" ] && echo "Error: no config file '$config_file'" >&2 && exit 1
+[ ! -f "$config_file" ] && echo "WARN: no config file '$config_file'" >&2
 
-. "$config_file"
+[ -f "$config_file" ] && . "$config_file"
+
+[ -n "$ZPKG_SSH_ADDRESS"   ] && SSH_ADDRESS=$ZPKG_SSH_ADDRESS
+[ -n "$ZPKG_HTTP_ADDRESS"  ] && HTTP_ADDRESS=$ZPKG_HTTP_ADDRESS
+[ -n "$ZPKG_COMPRESSION"   ] && COMPRESSION=$ZPKG_COMPRESSION
+[ -n "$ZPKG_ALLOW_ROOT"    ] && ALLOW_ROOT=$ZPKG_ALLOW_ROOT
+[ -n "$ZPKG_UPDATE_REMOVE" ] && UPDATE_REMOVE=$ZPKG_UPDATE_REMOVE
 
 # resolve relative pkg_path
-PKG_PATH="$(resolve_path "$PKG_PATH" "$config_path")"
+if [ -n "$ZPKG_PKG_PATH" ]
+then PKG_PATH="$(resolve_path "$ZPKG_PKG_PATH" "$(pwd)")"
+else PKG_PATH="$(resolve_path "$PKG_PATH" "$config_path")"
+fi
 
 root_check && [ -z "$opt_f" ] && [ "$ALLOW_ROOT" != "true" ] && echo "Cannot run as root" >&2 && exit 10
 
-[ ! -d "$PKG_PATH" ] && $sudo mkdir -p "$PKG_PATH"
+[ ! -d "$PKG_PATH" ] && $sudo mkdir -p "$PKG_PATH" && $sudo chmod a+rx "$PKG_PATH"
 
 # resolve compression
 [ -z "$COMPRESSION" ] && COMPRESSION="xz:xz:pixz"

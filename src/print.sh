@@ -26,13 +26,14 @@ Options:
   -f          Force running when root
   -R          Don't do self-update mitigation
 
-Config (zpkg.conf):
+Config file (zpkg.conf):
   SSH_ADDRESS         SSH access for deploy
   HTTP_ADDRESS        HTTP address for downloading packages
   PKG_PATH            Path to the local package database
   COMPRESSION         Compression configuration, extension:binary:parallel_binary:options
   ALLOW_ROOT          Set to true to allow running as root without -f. Default: false
-  UPDATE_REMOVE       Remove packages on update. Default: true"
+  UPDATE_REMOVE       Remove packages on update. Default: true
+Config can be overwritten by environment by appending 'ZPKG_' to the corresponding variable"
 }
 
 error() {
