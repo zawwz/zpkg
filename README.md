@@ -17,13 +17,11 @@ Requirements:
 
 Optional:
 - pixz/pigz (faster compression/decompression)
-- shfmt (minimize zpkg on compile)
 
 ### Installing
 
 ```shell
-wget https://zpkg.zawz.net/install.sh
-sh install.sh
+wget -qO- https://zpkg.zawz.net/install.sh | sh
 ```
 > By default the config is installed to /etc/zpkg
 > This can be changed with the -c option
@@ -34,7 +32,7 @@ If you wish to use another repository, substitute `zpkg.zawz.net` for your desir
 
 ```shell
 zpkg remove $(zpkg list)
-sudo rm -rd /etc/zpkg
+sudo rm -r /etc/zpkg
 ```
 
 ### Using
@@ -55,11 +53,13 @@ You need to be able to SSH to the zpkg user, SSH keys are recommended
 
 ### Process
 
-1. Write the desired config in `.config`, see `.config.example`
+1. Clone this repository
 
-2. Run `make`
+2. Write the desired config in `.config`, see `.config.example`
 
-3. Expose the package directory to the HTTP server
+3. Run `make`
+
+4. Expose the package directory to the HTTP server
 
 ### Package architecture
 
@@ -92,9 +92,9 @@ You need to be able to SSH to the zpkg user, SSH keys are recommended
 - Install/Remove/Update packages
 - Dependency resolution
 - Config redirection
-- User Home capability
+- User Home package files
 
-### Non-present functionality
+### Absent (and unplanned) functionality
 
 - Versions
 - Multi-repo
