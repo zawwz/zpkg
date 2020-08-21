@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # ordered requirements
-%include util.sh env.sh options.sh config.sh
+%include util.sh env.sh print.sh options.sh config.sh
 
 # everything else
 %include *.sh
@@ -61,11 +61,11 @@ info)
   fi
   ;;
 install)
-  fetch_pkglist $sudo > $_OUTPUT || exit $?
   if [ -z "$2" ]
   then
     echo "No package specified" >&2
   else
+    fetch_pkglist $sudo > $_OUTPUT || exit $?
     shift 1
     pkglist=$(LOG=true resolve_packages $*) || exit $?
     pkglist=$(INCLUDE_PACKAGES=true resolve_deps $* | tr '\n' ' ')

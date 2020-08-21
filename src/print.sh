@@ -30,7 +30,7 @@ Config file (zpkg.conf):
   SSH_ADDRESS         SSH access for deploy
   HTTP_ADDRESS        HTTP address for downloading packages
   PKG_PATH            Path to the local package database
-  COMPRESSION         Compression configuration, extension:binary:parallel_binary:options
+  COMPRESSION         Compression configuration, format: extension:binary:parallel_binary:options. Default: xz:xz:pixz
   ALLOW_ROOT          Set to true to allow running as root without -f. Default: false
   UPDATE_REMOVE       Remove packages on update. Default: true
 Config can be overwritten by environment by appending 'ZPKG_' to the corresponding variable"
@@ -75,9 +75,9 @@ package_info() {
 
   printf "Name:         %s\n" "$1"
   printf "Description:  %s\n" "$desc"
-  echo ""
-  printf "Status:  %s\n" "$status"
+  printf "Status:       %s\n" "$status"
   printf "Dependencies:  %s\n" "$deps"
   printf "Package size:    %s\n" "$csize"
   printf "Installed size:  %s\n" "$isize"
+  printf ""
 }
