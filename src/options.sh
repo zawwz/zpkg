@@ -9,7 +9,7 @@ do
     c) config_path="$OPTARG" ;;
     f) opt_f=y ;;
     R) opt_R=y ;;
-    \?) echo "Uknown option: $OPTARG" ; usage ; exit 1 ;;
+    *) echo "Unknown option: $OPTARG" >&2 ; usage ; exit 1 ;;
     esac
 done
 

@@ -79,5 +79,5 @@ package_info() {
   printf "Dependencies:  %s\n" "$deps"
   printf "Package size:    %s\n" "$csize"
   printf "Installed size:  %s\n" "$isize"
-  printf ""
+  printf "\n"
 }
