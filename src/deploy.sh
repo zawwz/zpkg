@@ -16,7 +16,7 @@ package()
     src="$tmpdir"
   fi
   (
-  cd "$src"
+  cd "$src" || exit $?
   unset list
   [ -f DEPS ] && list=DEPS
   [ -f DESC ] && list="$list DESC"
@@ -43,7 +43,7 @@ deploy_folder()
 {
   if [ -f "$1" ] && echo "$1" | grep -q '\.tar\.'"$extension\$" # file and valid extension
   then
-    cat "$1" | $pcompress -dc 2>/dev/null | tar -tf - >/dev/null 2>&1|| { echo "File '$1' is not a valid archive" && return 1; }
+    $pcompress -dc 2>/dev/null < "$1" | tar -tf - >/dev/null 2>&1|| { echo "File '$1' is not a valid archive" && return 1; }
     deploy_package "$1" "$1" || return $?
   elif [ -d "$1" ] # folder
   then

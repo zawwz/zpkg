@@ -4,13 +4,14 @@
 unpack()
 {
   echo "Unpacking $1"
-  cat "$1" | $pcompress -dc 2>/dev/null | tar -xf -
+  $pcompress -dc < "$1" 2>/dev/null | tar -xf -
 }
 
 # $1 = package , $2 = prefix
 add_package_entry()
 {
   (
+    set -e
     cd "$PKG_PATH"
     if grep -q "^$1 " installed 2>/dev/null
     then
