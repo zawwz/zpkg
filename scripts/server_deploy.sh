@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. "$(pwd)/.config"
+. "$(pwd)/.zpkgconfig"
 
 [ -z "$TMPDIR" ] && TMPDIR=/tmp
 
@@ -19,7 +19,7 @@ random_string()
 
 # add sources to server
 ssh "$SSH_ADDRESS" mkdir -p "$PKG_PATH" || exit $?
-scp .config server_scripts/* "$SSH_ADDRESS":~/ || exit $?
+scp .zpkgconfig server_scripts/* "$SSH_ADDRESS":~/ || exit $?
 
 ## zpkg package
 

@@ -55,7 +55,7 @@ You need to be able to SSH to the zpkg user, SSH keys are recommended
 
 1. Clone this repository
 
-2. Write the desired config in `.config`, see `.config.example`
+2. Write the desired config in `.zpkgconfig`, see `.zpkgconfig.example`
 
 3. Run `make`
 

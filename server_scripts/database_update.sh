@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. "$(pwd)/.config"
+. "$(pwd)/.zpkgconfig"
 
 [ -z "$TMPDIR" ] && TMPDIR=/tmp
 

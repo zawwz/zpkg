@@ -1,13 +1,13 @@
 #!/bin/sh
 
-. "$(pwd)/.config"
+. "$(pwd)/.zpkgconfig"
 
 # create install file
 # header
 echo '#!/bin/sh
 ' > install.sh
 # add config
-cat .config >> install.sh
+cat .zpkgconfig >> install.sh
 # body
 echo '
 
