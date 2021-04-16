@@ -139,4 +139,4 @@ deploy)
 *) usage && exit 1 ;;
 esac
 
-[ -n "$_self_update" ] && gen_self_update && _ZPKG_SELF_UPGRADE=y exec "$_tmpzpkg" -R install zpkg
+[ -n "$_self_update" ] && do_self_update

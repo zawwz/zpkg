@@ -42,11 +42,10 @@ upgrade_package()
 ## self upgrading mitigation
 
 unset _self_update
-gen_self_update()
+do_self_update()
 {
   _tmpzpkg="$TMPDIR/zpkg_bin_$(random_string 5)"
   # copy current file
   cp "$0" "$_tmpzpkg" || return $?
-  # make new script self-delete
-  echo 'rm -f "$0"' >> "$_tmpzpkg"
+  exec sh -c '_ZPKG_SELF_UPGRADE=y "$1" -R install zpkg ; rm -f "$1"' sh "$_tmpzpkg"
 }
