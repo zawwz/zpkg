@@ -35,7 +35,7 @@ upgrade_package()
     add_package_entry "$1" $2
   )
   ret=$?
-  rm -rd "$tmpdir" 2>/dev/null
+  rm -r "$tmpdir" 2>/dev/null
   return $ret
 }
 

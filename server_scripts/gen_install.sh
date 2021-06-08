@@ -98,7 +98,7 @@ mkdir -p "$tmpdir" || exit $?
 )
 
 # cleanup
-rm -rd "$tmpdir" || exit $?
+rm -r "$tmpdir" || exit $?
 zpkg -f update-database >/dev/null || exit $?
 
 ' >> install.sh

@@ -28,7 +28,7 @@ package()
   [ $size -gt 1048576 ] && cc=$pcompress
   tar -cf - --owner=0 --group=0 $list | $cc $comparg > "$pkg"
   )
-  [ -n "$tmpdir" ] && rm -rd "$tmpdir"
+  [ -n "$tmpdir" ] && rm -r "$tmpdir"
   return 0
 }
 

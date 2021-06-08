@@ -117,14 +117,14 @@ list-outdated)
   virtual_config_path "$tmpdir" || exit $?
   fetch_pkglist > /dev/null || exit $?
   outdated_packages
-  rm -rd "$tmpdir"
+  rm -r "$tmpdir"
   ;;
 list-removed)
   tmpdir="$TMPDIR/zpkg_$(random_string 5)"
   virtual_config_path "$tmpdir" || exit $?
   fetch_pkglist > /dev/null || exit $?
   removed_packages
-  rm -rd "$tmpdir"
+  rm -r "$tmpdir"
   ;;
 deploy)
   shift 1
