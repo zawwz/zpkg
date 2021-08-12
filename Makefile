@@ -14,4 +14,4 @@ minimal-deploy: minimal-build
 	scripts/server_deploy.sh
 
 minimal-build:
-	lxsh -o zpkg -m --minify-quotes --minify-var --exclude-var "$(var_exclude)" --minify-fct --remove-unused src/main.sh
+	lxsh -o zpkg -M --exclude-var "$(var_exclude)" src/main.sh
