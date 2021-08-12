@@ -26,14 +26,14 @@ scp .zpkgconfig server_scripts/* "$SSH_ADDRESS":~/ || exit $?
 # env
 PKG=zpkg
 DEST=/usr/bin
-BASHDEST=/etc/bash_completion.d
+BASHDEST=/usr/share/bash-completion/completions
 tmpdir="$TMPDIR/zpkg$(random_string 5)"
 fullpath="$tmpdir/$PKG/ROOT"
 
 # setup package sources
 mkdir -p "$fullpath$DEST" || exit $?
 mkdir -p "$fullpath$BASHDEST" || exit $?
-cp completion/zpkg.bash "$fullpath$BASHDEST" || exit $?
+cp completion/zpkg.bash "$fullpath$BASHDEST/zpkg" || exit $?
 mv zpkg "$fullpath$DEST" || exit $?
 
 # create and send package

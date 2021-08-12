@@ -13,7 +13,7 @@ _zpkg_completion()
   elif [ "$COMP_CWORD" -gt "1" ] && echo "$_cw1_pkg_installed" | grep -qw -- "${COMP_WORDS[1]}" ; then
     _compwords=$(zpkg list 2>/dev/null)
   fi
-  COMPREPLY=($(compgen -W "$_compwords" "${COMP_WORDS[$COMP_CWORD]}" 2>/dev/null))
+  COMPREPLY=($(compgen -W "$_compwords" "$2" 2>/dev/null))
 }
 
 complete -F _zpkg_completion -o dirnames zpkg
