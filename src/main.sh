@@ -1,7 +1,11 @@
 #!/bin/sh
 
+[ "$DEBUG" = true ] && set -x
+
 # ordered requirements
-%include util.sh env.sh print.sh options.sh config.sh
+%include util.sh env.sh print.sh
+%include options.sh
+%include config.sh
 
 # everything else
 %include *.sh

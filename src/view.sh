@@ -58,7 +58,7 @@ is_installed()
 # $1 = file
 view_package_file() {
   tree=$(cat "$1" | $pcompress -dc 2>/dev/null | tar -tf - 2>/dev/null) || exit $?
-  echo "$tree" | grep -E '^ROOT/|^HOME/' | sed "/\/$/d ; s|^ROOT/|/|g ; s|^HOME/|$HOME/|g" 2>/dev/null
+  echo "$tree" | grep -E '^ROOT/|^HOME/' | sed "/\/$/d ; s|^ROOT/|$ROOT_PATH/|g ; s|^HOME/|$HOME/|g" 2>/dev/null
 }
 
 # $1 = package name

@@ -25,10 +25,10 @@ upgrade_package()
     unpack "$1.tar.$extension" || return $?
 
     oldlist=$(cat "$PKG_PATH/$1.tar.$extension" | $pcompress -dc 2>/dev/null | tar -tf - 2>/dev/null | sort)
-    echo "$oldlist" | grep "^ROOT/" | to_delete - ROOT | sed 's|^ROOT/||g' | tac | delete_files / $2
+    echo "$oldlist" | grep "^ROOT/" | to_delete - ROOT | sed 's|^ROOT/||g' | tac | delete_files "$ROOT_PATH/" $2
     echo "$oldlist" | grep "^HOME/" | to_delete - HOME | sed 's|^HOME/||g' | tac | delete_files "$HOME"
 
-    copy_files ROOT / $2 2>/dev/null
+    copy_files ROOT "$ROOT_PATH/" $2 2>/dev/null
     copy_files HOME "$HOME" 2>/dev/null
     $2 cp "$1.tar.$extension" "$PKG_PATH"
     $2 chmod a+r "$PKG_PATH/$1.tar.$extension"
@@ -47,5 +47,5 @@ do_self_update()
   _tmpzpkg="$TMPDIR/zpkg_bin_$(random_string 5)"
   # copy current file
   cp "$0" "$_tmpzpkg" || return $?
-  exec sh -c '_ZPKG_SELF_UPGRADE=y "$1" -R install zpkg ; rm -f "$1"' sh "$_tmpzpkg"
+  exec sh -c '_ZPKG_SELF_UPGRADE=y "$1" -c "$2" -R install zpkg ; rm -f "$1"' sh "$_tmpzpkg" "$config_path"
 }
