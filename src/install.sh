@@ -43,6 +43,7 @@ install_package()
     (
       umask a+rx
       unpack "$1.tar.$extension" $2 || return $?
+      [ -d "ROOT" ] || return 0
       copy_files ROOT "$ROOT_PATH/" $2 2>/dev/null || return $?
     ) || return $?
     copy_files HOME "$HOME" 2>/dev/null
