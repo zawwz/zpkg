@@ -31,7 +31,7 @@ Options:
   -c <path>  Use this path as config"
 }
 
-config_path=/etc/zpkg
+config_path=$ZPKG_ROOT_PATH/etc/zpkg
 
 while getopts ":hc:" opt;
 do
@@ -61,7 +61,7 @@ then
     echo "Use '"'"'$(basename "$0") force'"'"' to force running as root"
     exit 10
   fi
-else
+elif [ -z "$NOSUDO" ] ; then
   which sudo >/dev/null 2>&1 || { echo "sudo not installed" >&2 && exit 11; }
   sudo=sudo
 fi
@@ -71,7 +71,7 @@ $sudo sh -c "echo \"# zpkg config file
 SSH_ADDRESS=$SSH_ADDRESS
 HTTP_ADDRESS=$HTTP_ADDRESS
 COMPRESSION=$COMPRESSION
-PKG_PATH=pkg
+PKG_PATH=/var/lib/zpkg
 ALLOW_ROOT=false
 UPDATE_REMOVE=true\" > zpkg.conf"
 
