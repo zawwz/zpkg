@@ -1,10 +1,10 @@
 #!/bin/sh
 
-# $1 = file , $2 = prefix
+# $1 = file , $2 = prefix , $3 = target to extract
 unpack()
 {
   echo "Unpacking $1"
-  $pcompress -dc < "$1" 2>/dev/null | tar -xf -
+  $pcompress -dc < "$1" 2>/dev/null | tar -xf - $3
 }
 
 # $1 = package , $2 = prefix
@@ -43,13 +43,15 @@ install_package()
     (
       umask a+rx
       unpack "$1.tar.$extension" $2 || return $?
+      hook install pre $2
       [ -d "ROOT" ] || return 0
       copy_files ROOT "$ROOT_PATH/" $2 2>/dev/null || return $?
     ) || return $?
     copy_files HOME "$HOME" 2>/dev/null
     add_package_entry "$1" $2
+    hook install post $2
   )
   ret=$?
-  rm -r "$tmpdir" 2>/dev/null
+  rm -rf "$tmpdir" 2>/dev/null
   return $ret
 }

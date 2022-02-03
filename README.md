@@ -67,6 +67,9 @@ You need to be able to SSH to the zpkg user, SSH keys are recommended
 .
 +-- DEPS
 +-- DESC
++-- HOOKS
+|    +-- pre_install
+|    +-- ...
 +-- ROOT
 |    +-- /
 +-- HOME
@@ -76,6 +79,23 @@ You need to be able to SSH to the zpkg user, SSH keys are recommended
 - The HOME directory represents the home directory of the user
 - The DEPS file contains dependency packages separated by spaces or newlines. Dependencies are package names from the repository
 - The DESC file contains the description of the package
+- The HOOKS directory contains hooks to run on certain operations.
+
+#### Hooks
+
+Hooks are executable files that are run at some points during processing. <br>
+Files are named `ORDER_OPERATION` or `ORDER_OPERATION_user`, for example: `pre_install`, `post_upgrade_user`. <br>
+The `_user` file is executed as user while original is executed as root.
+
+Supported hooks:
+- pre_install
+- post_install
+- pre_upgrade
+- post_upgrade
+- pre_remove
+- post_remove
+
+> Suffix with `_user` to run as user
 
 ### Deploying packages
 

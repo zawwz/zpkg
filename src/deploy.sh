@@ -8,7 +8,7 @@ package()
   pkg="$2"
 
   unset tmpdir
-  if [ ! -d "$src/ROOT" ] && [ ! -d "$src/HOME" ] && [ ! -f "$src/DEPS" ] && [ ! -f "$src/DESC" ]
+  if [ ! -d "$src/ROOT" ] && [ ! -d "$src/HOME" ] && [ ! -f "$src/DEPS" ] && [ ! -f "$src/DESC" ] && [ ! -d "$src/HOOKS" ]
   then
     tmpdir="$TMPDIR/zpkg_$(random_string 5)"
     mkdir -p "$tmpdir"
@@ -22,6 +22,7 @@ package()
   [ -f DESC ] && list="$list DESC"
   [ -d HOME ] && list="$list HOME"
   [ -d ROOT ] && list="$list ROOT"
+  [ -d HOOKS ] && list="$list HOOKS"
   size=$(du -sb $list | awk '{print $1}' | paste -sd+ | bc)
   echo "Packaging $(basename "$pkg"): $(echo "$size" | numfmt --to=iec-i)B"
   cc=$compress

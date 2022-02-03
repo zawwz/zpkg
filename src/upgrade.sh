@@ -24,6 +24,8 @@ upgrade_package()
     fetch_package "$1" || { echo "Package '$1' not found" >&2 && return 1; }
     unpack "$1.tar.$extension" || return $?
 
+    hook upgrade pre $2
+
     oldlist=$(cat "$PKG_PATH/$1.tar.$extension" | $pcompress -dc 2>/dev/null | tar -tf - 2>/dev/null | sort)
     echo "$oldlist" | grep "^ROOT/" | to_delete - ROOT | sed 's|^ROOT/||g' | tac | delete_files "$ROOT_PATH/" $2
     echo "$oldlist" | grep "^HOME/" | to_delete - HOME | sed 's|^HOME/||g' | tac | delete_files "$HOME"
@@ -33,9 +35,11 @@ upgrade_package()
     $2 cp "$1.tar.$extension" "$PKG_PATH"
     $2 chmod a+r "$PKG_PATH/$1.tar.$extension"
     add_package_entry "$1" $2
+
+    hook upgrade post $2
   )
   ret=$?
-  rm -r "$tmpdir" 2>/dev/null
+  rm -rf "$tmpdir" 2>/dev/null
   return $ret
 }
 
