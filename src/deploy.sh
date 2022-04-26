@@ -37,7 +37,7 @@ package()
 deploy_package()
 {
   echo "Deploying $(basename "$1"): $(du -sh "$1" | awk '{print $1}')iB"
-  scp "$1" $SSH_ADDRESS:'$(grep "PKG_PATH=" .zpkgconfig | cut -d"=" -f2-)'
+  pv "$1" | ssh "$SSH_ADDRESS" 'cat > "$(grep "PKG_PATH=" .zpkgconfig | cut -d"=" -f2-)"/'"'$(basename "$1")'"''
 }
 
 deploy_folder()
