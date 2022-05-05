@@ -143,4 +143,6 @@ deploy)
 *) usage && exit 1 ;;
 esac
 
-[ -n "$_self_update" ] && do_self_update
+if [ -n "$_self_update" ] ; then
+ do_self_update
+fi
