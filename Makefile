@@ -7,7 +7,7 @@ build:
 	scripts/shcompile src/main.sh > zpkg && chmod +x zpkg
 
 # minimized build with lxsh
-var_exclude = TMPDIR ZPKG_.* _ZPKG_.* SSH_ADDRESS HTTP_ADDRESS PKG_PATH COMPRESSION ALLOW_ROOT UPDATE_REMOVE
+var_exclude = TMPDIR ZPKG_.* _ZPKG_.* SSH_ADDRESS HTTP_ADDRESS PKG_PATH COMPRESSION ALLOW_ROOT UPDATE_REMOVE NOSUDO
 minimal: minimal-deploy
 
 minimal-deploy: minimal-build

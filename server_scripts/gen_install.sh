@@ -10,6 +10,7 @@ echo '#!/bin/sh
 cat .zpkgconfig >> install.sh
 # body
 echo '
+[ "$DEBUG" = true ] && set -x
 
 [ -z "$TMPDIR" ] && TMPDIR=/tmp
 
