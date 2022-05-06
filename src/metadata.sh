@@ -1,3 +1,38 @@
+#!/bin/sh
+
+# $1 = package , $2 = prefix
+add_package_entry()
+{
+  (
+    set -e
+    cd "$PKG_PATH"
+    if grep -q "^$1 " installed 2>/dev/null ; then
+      $2 sed "s|$1 .*\$|$1 $(date +%s)|g" -i installed
+    else
+      $2 sh -c "echo '$1 $(date +%s)' >> installed"
+      $2 chmod a+r installed
+    fi
+  )
+}
+
+deps()
+{
+  (
+  cd "$PKG_PATH"
+  l=$(grep "^$1 " pkglist) || return $?
+  echo "$l" | cut -d' ' -f3-
+  )
+}
+
+# $1 = package
+is_installed()
+{
+  (
+  cd "$PKG_PATH"
+  grep -q "^$1 " installed 2>/dev/null
+  )
+}
+
 # stdin = metadata
 # $1 = value
 metadata_get() {
@@ -29,12 +64,12 @@ gen_metadata() {
   printf "installsize=%s\n" "$isize"
   gen_hook_metadata
   printf "tree=%s\n" "$(find ROOT HOME ! -type d 2>/dev/null | base64 -w0)"
-  printf "dirtree=%s\n" "$(find ROOT HOME -type d -mindepth 1 2>/dev/null | base64 -w0)"
+  printf "dirtree=%s\n" "$(find ROOT HOME -mindepth 1 -type d 2>/dev/null | base64 -w0)"
 }
 
 # $1 = sudo
 convert_to_metadata() {
-  find "$PKG_PATH" -type f -maxdepth 1 -name "*.tar.$extension" |
+  find "$PKG_PATH" -maxdepth 1 -type f -name "*.tar.$extension" |
   while read -r I ; do
     pkgname=$(basename "${I%.tar.$extension}")
     echo "Migrate $pkgname"

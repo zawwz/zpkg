@@ -3,9 +3,7 @@
 [ "$DEBUG" = true ] && set -x
 
 # ordered requirements
-%include util.sh env.sh print.sh
-%include options.sh
-%include config.sh
+%include util.sh options.sh config.sh
 
 # everything else
 %include *.sh

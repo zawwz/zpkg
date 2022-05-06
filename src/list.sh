@@ -1,19 +1,5 @@
 #!/bin/sh
 
-deps()
-{
-  (
-  cd "$PKG_PATH"
-  l=$(grep "^$1 " pkglist) || return $?
-  echo "$l" | cut -d' ' -f3-
-  )
-}
-
-# $1 = pkg file
-desc() {
-  cat "$1" | $pcompress -dc 2>/dev/null | tar -xOf - DESC
-}
-
 resolve_packages()
 {
   RET=0
@@ -45,14 +31,6 @@ resolve_deps()
   [ "$INCLUDE_PACKAGES" = "true" ] && ALLDEPS="$ALLDEPS $*"
   echo "$ALLDEPS" | tr -s ' \n' '\n' | sort | uniq | sed '/^$/d'
   return $RET
-}
-
-is_installed()
-{
-  (
-  cd "$PKG_PATH"
-  grep -q "^$1 " installed 2>/dev/null
-  )
 }
 
 # $1 = file

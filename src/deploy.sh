@@ -1,6 +1,5 @@
 #!/bin/sh
 
-
 # $1 = source , $2 = package , $3 = name
 package()
 {

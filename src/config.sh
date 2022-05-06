@@ -10,6 +10,14 @@ virtual_config_path()
   ln -sf "$old_pkg_path/installed" "$PKG_PATH/installed"
 }
 
+# defaults
+config_path=${ZPKG_ROOT_PATH-$ROOT_PATH}/etc/zpkg
+fname="$(basename "$0")"
+ALLOW_ROOT=false
+UPDATE_REMOVE=true
+TMPDIR=${TMPDIR-/tmp}
+
+
 # resolve relative config_path
 config_path="$(resolve_path "$config_path" "$(pwd)")"
 config_file="$config_path/zpkg.conf"
