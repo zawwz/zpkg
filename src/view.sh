@@ -58,12 +58,12 @@ is_installed()
 # $1 = file
 view_package_file() {
   tree=$(cat "$1" | $pcompress -dc 2>/dev/null | tar -tf - 2>/dev/null) || exit $?
-  echo "$tree" | grep -E '^ROOT/|^HOME/' | sed "/\/$/d ; s|^ROOT/|$ROOT_PATH/|g ; s|^HOME/|$HOME/|g" 2>/dev/null
+  echo "$tree" | grep -E '^ROOT/|^HOME/' | sed "/\/$/d ; s|^ROOT/|$ROOT_PATH/|g ; s|^HOME/|$HOME/|g"
 }
 
 # $1 = package name
 view_package() {
-  ( cd "$PKG_PATH" && view_package_file "$1.tar.$extension" )
+  metadata_get tree < "$PKG_PATH/$1.dat" | base64 -d | sed "s|^ROOT/|$ROOT_PATH/|g ; s|^HOME/|$HOME/|g" | sort
 }
 
 removed_packages()

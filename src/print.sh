@@ -40,44 +40,44 @@ error() {
     printf "\033[1;31m%s\033[0m\n" "$1" >&2
 }
 
+# stdin = metadata
+metadata_info() {
+  contents=$(cat)
+  metadata_arg_get "deps"
+  deps=$(metadata_arg_get "$contents" "deps")
+  desc=$(metadata_arg_get "$contents" "desc")
+  csize=$(metadata_arg_get "$contents" "pkgsize" | numfmt --to=iec-i --suffix=B --padding 6)
+  isize=$(metadata_arg_get "$contents" "installsize" | numfmt --to=iec-i --suffix=B --padding 6)
+  printf "Description:   %s\n" "$desc"
+  printf "Dependencies:  %s\n" "$deps"
+  printf "Package size:    %s\n" "$csize"
+  printf "Installed size:  %s\n" "$isize"
+}
+
 # $1 = package name
 package_info() {
-  # prepare
-  tmpdir="$TMPDIR/zpkg_$(random_string 5)"
-  mkdir -p "$tmpdir" || return $?
-  pwd="$(pwd)"
-  cd "$tmpdir"
-
   # get status
   status="not installed"
   grep -q "^$1 " "$PKG_PATH/pkglist" 2>/dev/null || { echo "Package '$1' not found" && return 1; }
   grep -q "^$1 " "$PKG_PATH/installed" 2>/dev/null && status=installed
 
-  # get and unpack
-  if [ "$status" = "installed" ] && [ -f "$PKG_PATH/$1.tar.$extension" ]
-  then
-    pkg="$PKG_PATH/$1.tar.$extension"
-  else
-    fetch_package "$1" >/dev/null 2>&1 || { echo "Error fetching package" >&2 && ret=$?; }
-    pkg="$1.tar.$extension"
-  fi
-  unpack "$pkg" >/dev/null
-  # extract values
-  deps=$(cat DEPS 2>/dev/null | tr -s ' \t\n' ' ')
-  desc=$(cat DESC 2>/dev/null)
-  csize=$(stat -c '%s' "$pkg" | numfmt --to=iec-i --suffix=B --padding 6)
-  isize=$(du -sb ROOT HOME 2>/dev/null | awk '{print $1}' | paste -sd+ | bc | numfmt --to=iec-i --suffix=B --padding 6)
-
-  cd "$pwd"
-  rm -rf "$tmpdir"
-
-  [ -n "$ret" ] && return $ret
-
   printf "Name:         %s\n" "$1"
-  printf "Description:  %s\n" "$desc"
   printf "Status:       %s\n" "$status"
-  printf "Dependencies:  %s\n" "$deps"
-  printf "Package size:    %s\n" "$csize"
-  printf "Installed size:  %s\n" "$isize"
-  printf "\n"
+
+  # get and unpack
+  if [ "$status" = "installed" ] && [ -f "$PKG_PATH/$1.dat" ]
+  then
+    cat "$PKG_PATH/$1.dat"
+  else
+    tmpdir="$TMPDIR/zpkg_$(random_string 5)"
+    mkdir -p "$tmpdir" || return $?
+    (
+      cd "$tmpdir"
+      fetch_package "$1" >/dev/null 2>&1 || { echo "Error fetching package" >&2 && ret=$?; }
+      unpack "$1.tar.$extension"
+      gen_metadata "$1.tar.$extension"
+    )
+    rm -rf "$tmpdir"
+  fi | metadata_info
+  echo
 }

@@ -11,6 +11,7 @@
 %include *.sh
 
 case "$1" in
+migrate) convert_to_metadata $sudo ;;
 list) awk '{print $1}' "$PKG_PATH/installed" 2>/dev/null | sort ;;
 list-all) awk '{print $1}' "$PKG_PATH/pkglist" 2>/dev/null | sort ;;
 update-database) fetch_pkglist $sudo ;;
@@ -38,7 +39,7 @@ show)
       then
         view_package "$I"
       else
-        wget "$HTTP_ADDRESS/$1.tar.$extension" -q -O - 2>/dev/null | view_package_file - || { echo "Could not fetch package '$I'" >&2 ; return 1 ; }
+        fetch_package "$1" /dev/stdout 2>/dev/null | view_package_file - || { echo "Could not fetch package '$I'" >&2 ; return 1 ; }
       fi
     done
   fi

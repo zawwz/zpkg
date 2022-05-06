@@ -5,37 +5,38 @@
 delete_files()
 {
   cd "$1" || return $?
-  $2 xargs -d '\n' rm -d 2>/dev/null
+  list=$(cat)
+  printf "%s\n" "$list" | tr '\n' '\0' | $2 xargs -0 rm -d 2>/dev/null
+  printf "%s\n" "$list" | tr '\n' '\0' | xargs -0 -n1 dirname | uniq |
+    tr '\n' '\0' | $2 xargs -0 rmdir -p 2>/dev/null
+}
+
+# stdin: old list
+# $1 = old list , $2 = new path
+to_delete()
+{
+  find "$2" -type d 2>/dev/null | sed 's|$|/|g' > tmplist
+  find "$2" -type f 2>/dev/null >> tmplist
+  sort tmplist > list
+  diff --new-line-format="" --unchanged-line-format="" "$1" list
+  rm tmplist list
 }
 
 # $1 = package , $2 = prefix
 remove_package()
 {
-  archive="$PKG_PATH/$1.tar.$extension"
-  if [ ! -f "$archive" ] || ! grep -q "^$1 " "$PKG_PATH/installed"
+  if [ ! -f "$PKG_PATH/$1.dat" ] || ! grep -q "^$1 " "$PKG_PATH/installed"
   then
     echo "Package '$1' not installed" >&2
     return 1
   fi
 
-  tmpdir="$TMPDIR/zpkg_$(random_string 5)"
-  mkdir -p "$tmpdir"
-  (
-    cd "$tmpdir" || exit $?
-    echo "Removing $1"
+  echo "Removing $1"
 
-    unpack "$archive" $2 HOOKS >/dev/null 2>&1 || true
+  hook remove pre "$1" $2
+  remove_files "$1" $2
+  hook remove post "$1" $2
+  $2 rm -f "$PKG_PATH/$1.dat" 2>/dev/null
+  $2 sed -i "/^$1 /d" "$PKG_PATH/installed"
 
-    hook remove pre $2
-    list=$(cat "$archive" | $pcompress -dc 2>/dev/null | tar -tf - 2>/dev/null)
-    echo "$list" | grep "^ROOT/" | sed 's|^ROOT/||g' | tac | delete_files "$ROOT_PATH/" $2
-    echo "$list" | grep "^HOME/" | sed 's|^HOME/||g' | tac | delete_files "$HOME"
-
-    $2 rm "$archive" 2>/dev/null
-    $2 sed -i "/^$1 /d" "$PKG_PATH/installed"
-
-    hook remove post $2
-  )
-  ret=$?
-  rm -rf "$tmpdir" 2>/dev/null
 }

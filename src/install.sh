@@ -38,18 +38,12 @@ install_package()
   (
     cd "$tmpdir" || exit $?
     fetch_package "$1" || { echo "Package '$1' not found" >&2 && return 1; }
-    $2 cp "$1.tar.$extension" "$PKG_PATH"
-    $2 chmod a+r "$PKG_PATH/$1.tar.$extension"
-    (
-      umask a+rx
-      unpack "$1.tar.$extension" $2 || return $?
-      hook install pre $2
-      [ -d "ROOT" ] || return 0
-      copy_files ROOT "$ROOT_PATH/" $2 2>/dev/null || return $?
-    ) || return $?
-    copy_files HOME "$HOME" 2>/dev/null
+    unpack "$1.tar.$extension" $2 || exit $?
+    gen_metadata "$1.tar.$extension" | $2 tee "$PKG_PATH/$1.dat" >/dev/null
+    hook install pre "$1" $2
+    install_files "$1" $2
+    hook install post "$1" $2
     add_package_entry "$1" $2
-    hook install post $2
   )
   ret=$?
   rm -rf "$tmpdir" 2>/dev/null
